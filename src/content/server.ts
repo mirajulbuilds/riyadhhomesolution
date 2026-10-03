@@ -84,10 +84,11 @@ async function contentFromSupabase(url: string, key: string): Promise<SiteConten
       .eq('is_active', true)
       .order('sort_order')
       .order('taken_on', { ascending: false, nullsFirst: false }),
+    // No status filter: the public key cannot read the status column at all, and Row Level
+    // Security already limits it to approved reviews.
     db
       .from('reviews')
       .select('id, name, district, service_text, rating, body, photo_url, created_at')
-      .eq('status', 'approved')
       .order('created_at', { ascending: false })
       .limit(200),
     db.from('google_reviews_cache').select('payload, fetched_at').order('fetched_at', { ascending: false }).limit(1),

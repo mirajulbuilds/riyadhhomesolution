@@ -382,7 +382,11 @@ revoke insert, update, delete, truncate on
 from anon;
 
 -- ---------------------------------------------------------------------------
--- Storage buckets (public read by URL; listing and writes are admin-only)
+-- Storage buckets
+--   services, products, gallery, site: PUBLIC — files are shown on the site by URL.
+--   reviews: PRIVATE — visitors' unmoderated uploads. Only admins can open them; when a
+--            review is approved, the admin panel copies its photo into site/reviews/.
+-- Listing and all writes are admin-only (policies below).
 -- ---------------------------------------------------------------------------
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
@@ -392,7 +396,7 @@ values
   ('gallery', 'gallery', true, 5242880, array['image/webp', 'image/jpeg', 'image/png', 'image/avif']),
   ('site', 'site', true, 5242880, array['image/webp', 'image/jpeg', 'image/png', 'image/avif', 'image/svg+xml']),
   -- Review photos are compressed in the browser before upload, so keep this one small.
-  ('reviews', 'reviews', true, 2097152, array['image/webp', 'image/jpeg', 'image/png'])
+  ('reviews', 'reviews', false, 2097152, array['image/webp', 'image/jpeg', 'image/png'])
 on conflict (id) do nothing;
 
 create policy "storage: admin read" on storage.objects
@@ -410,7 +414,7 @@ create policy "storage: admin delete" on storage.objects
   using (bucket_id in ('services', 'products', 'gallery', 'site', 'reviews') and (select public.is_admin()));
 
 -- Visitors may upload one photo with their review, into reviews/pending/ only (no overwrite,
--- no listing, no delete). It is only shown on the site once an admin approves the review.
+-- no reading, no listing, no delete). It reaches the site only after an admin approves it.
 create policy "storage: public review photo upload" on storage.objects
   for insert to anon, authenticated
   with check (bucket_id = 'reviews' and (storage.foldername(name))[1] = 'pending');
