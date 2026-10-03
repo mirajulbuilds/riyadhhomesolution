@@ -1,0 +1,14 @@
+# Cloudflare Pages redirects — https://developers.cloudflare.com/pages/configuration/redirects/
+#
+# www → apex: Cloudflare does not support domain-level redirects in this file. Once the domain
+# is on Cloudflare, add a Redirect Rule in the dashboard (Rules → Redirect Rules):
+#   when hostname equals www.riyadhhomesolution.com
+#   → dynamic redirect to concat("https://riyadhhomesolution.com", http.request.uri.path), 301, keep query string
+#
+# Trailing slashes: pages are built as flat files (services/plumbing.html), so Pages serves
+# /services/plumbing and redirects /services/plumbing/ and /services/plumbing.html to it.
+# Every canonical URL is therefore slash-less (except the home page "/").
+
+# Arabic is the root language; send guessed /ar URLs to it.
+/ar      /         301
+/ar/*    /:splat   301

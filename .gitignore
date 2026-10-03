@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.vite-react-ssg-temp/
+
+# local env files — real keys live here, never commit them
+.env
+.env.local
+.env.*.local
+
+# supabase local state
+supabase/.temp/
+supabase/.branches/
+
+# editors / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# Claude Code local settings
+.claude/settings.local.json
