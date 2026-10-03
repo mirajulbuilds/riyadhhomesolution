@@ -1,28 +1,37 @@
 import { MessageCircle, Phone } from 'lucide-react'
 import type { ServiceCard as ServiceCardData } from '@/content/types'
 import { localizePath } from '@/i18n/lang'
-import { CategoryIcon, categoryTone } from './CategoryIcon'
+import { CategoryIllustration, categoryTone } from './CategoryIcon'
 import { CallLink, WhatsAppLink } from './ContactLinks'
 import { BrandIcon } from './icons/BrandIcon'
 import { Badge } from './TrustStrip'
 import { ArrowLink } from './ui/Section'
 import { useSite, useStrings } from './site-context'
 
-/** 4:3 service image, or a tinted placeholder with the category icon until a photo is uploaded. */
+/** The category a service belongs to, for its image placeholder. */
+export interface CategoryArtRef {
+  icon: string | null
+  imageUrl: string | null
+}
+
+/**
+ * 4:3 service photo. Until one is uploaded: the category illustration, small, on a soft tint
+ * of the category colour.
+ */
 export function ServiceImage({
   src,
   alt,
-  icon,
+  category,
   className = '',
   eager = false,
   compact = false,
 }: {
   src: string | null
   alt: string
-  icon: string | null
+  category: CategoryArtRef
   className?: string
   eager?: boolean
-  /** Smaller placeholder icon (phone thumbnail). */
+  /** Phone thumbnail: a smaller illustration. */
   compact?: boolean
 }) {
   if (src) {
@@ -38,18 +47,31 @@ export function ServiceImage({
       />
     )
   }
-  const tone = categoryTone(icon)
+  const tone = categoryTone(category.icon)
   return (
-    <div aria-hidden="true" className={`grid aspect-[4/3] w-full place-items-center rounded-2xl ${tone.bg} ${className}`}>
-      <span className={`grid place-items-center rounded-full bg-white/80 ${compact ? 'size-11 sm:size-16' : 'size-16'}`}>
-        <CategoryIcon icon={icon} className={`${tone.fg} ${compact ? 'size-5 sm:size-8' : 'size-8'}`} />
-      </span>
+    <div aria-hidden="true" className={`relative grid aspect-[4/3] w-full place-items-center overflow-hidden rounded-2xl ${tone.bg} ${className}`}>
+      <span className="absolute size-[72%] max-h-[86%] rounded-full bg-white/55" />
+      <CategoryIllustration
+        src={category.imageUrl}
+        icon={category.icon}
+        size={compact ? 120 : 140}
+        eager={eager}
+        className={`relative ${compact ? 'size-16 sm:size-[120px]' : 'size-[120px] sm:size-[140px]'}`}
+      />
     </div>
   )
 }
 
 /** Service grid card (brief §6.3): image, name, one line, price tag, WhatsApp, Call, optional Details. */
-export function ServiceCard({ service, icon, headingLevel = 3 }: { service: ServiceCardData; icon: string | null; headingLevel?: 2 | 3 }) {
+export function ServiceCard({
+  service,
+  category,
+  headingLevel = 3,
+}: {
+  service: ServiceCardData
+  category: CategoryArtRef
+  headingLevel?: 2 | 3
+}) {
   const { lang } = useSite()
   const t = useStrings()
   const Heading = headingLevel === 2 ? 'h2' : 'h3'
@@ -63,7 +85,7 @@ export function ServiceCard({ service, icon, headingLevel = 3 }: { service: Serv
         <ServiceImage
           src={service.imageUrl}
           alt={service.name}
-          icon={icon}
+          category={category}
           className="aspect-square! w-[88px]! shrink-0 self-start sm:aspect-[4/3]! sm:w-full!"
           compact
         />
@@ -81,7 +103,7 @@ export function ServiceCard({ service, icon, headingLevel = 3 }: { service: Serv
       <div className="mt-auto flex flex-col pt-4 sm:px-2 sm:pb-2">
         <div className="grid grid-cols-2 gap-2">
           <WhatsAppLink
-            message={{ kind: 'service', name: service.name, extraLines: service.waExtraLines }}
+            message={{ kind: 'service', name: service.name, custom: service.waMessage }}
             location="service_card"
             category={service.categorySlug}
             service={service.slug}
@@ -106,8 +128,11 @@ export function ServiceCard({ service, icon, headingLevel = 3 }: { service: Serv
   )
 }
 
-/** Last card of every category grid: "Didn't find your service? Describe it to us". */
-export function DescribeCard({ categoryName, categorySlug }: { categoryName?: string; categorySlug?: string }) {
+/**
+ * Last card of every category grid: "Didn't find your service? Describe it to us". On a
+ * category page it opens WhatsApp with that category's message.
+ */
+export function DescribeCard({ categoryMessage, categorySlug }: { categoryMessage?: string; categorySlug?: string }) {
   const t = useStrings()
   return (
     <article className="flex h-full flex-col justify-between rounded-card border-2 border-dashed border-orange/50 bg-white p-6">
@@ -119,7 +144,7 @@ export function DescribeCard({ categoryName, categorySlug }: { categoryName?: st
         <p className="mt-2 text-sm/relaxed text-muted">{t.describeService.body}</p>
       </div>
       <WhatsAppLink
-        message={{ kind: 'describe', category: categoryName }}
+        message={categoryMessage === undefined ? { kind: 'general' } : { kind: 'category', message: categoryMessage }}
         location="describe_card"
         category={categorySlug}
         className="btn btn-wa mt-6"

@@ -35,15 +35,15 @@ function staticPaths(kind: 'category' | 'service') {
 
 const handle = (pageType: string, cta?: RouteHandle['cta']): RouteHandle => ({ pageType, cta })
 
-/** Header + sticky-bar WhatsApp on a category page: "I need: Plumbing". */
+/** Header, sticky-bar and CTA-band WhatsApp on a category page: the category's message ("I need a plumber."). */
 const categoryCta = (data: CategoryData) => ({
-  message: { kind: 'service' as const, name: data.category.name },
+  message: { kind: 'category' as const, message: data.category.waMessage },
   category: data.category.slug,
 })
 
-/** …and on a service page: "I need: Mixer tap replacement" (+ its extra lines). */
+/** …and on a service page: "I'd like to ask about: Mixer tap replacement." (or its custom text). */
 const serviceCta = (data: ServiceData) => ({
-  message: { kind: 'service' as const, name: data.service.name, extraLines: data.service.waExtraLines },
+  message: { kind: 'service' as const, name: data.service.name, custom: data.service.waMessage },
   category: data.category.slug,
   service: data.service.slug,
 })

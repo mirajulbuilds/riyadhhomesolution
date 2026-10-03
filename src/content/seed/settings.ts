@@ -9,7 +9,7 @@ export const seedSettings: SettingsValues = {
   whatsapp_number: '966500569163',
 
   address: {
-    street: { ar: 'شارع أبي جعفر المنصور', en: 'Abi Jafar Al Mansour St' },
+    street: { ar: '2886 شارع أبي جعفر المنصور', en: '2886 Abi Jafar Al Mansour St' },
     district: { ar: 'حي غرناطة', en: 'Ghirnatah' },
     city: { ar: 'الرياض', en: 'Riyadh' },
     postal_code: '13242',
@@ -17,8 +17,10 @@ export const seedSettings: SettingsValues = {
   },
   plus_code: 'QPWX+2JM Riyadh',
   maps_url: 'https://maps.app.goo.gl/DU7jN7hfts3gSaf66',
-  // Centre of plus code QPWX+2JM (Riyadh), decoded with the Open Location Code algorithm.
-  geo: { lat: 24.795088, lng: 46.749047 },
+  // The shop's verified Google Business listing marker: the !3d / !4d values in the URL that
+  // maps_url resolves to (not the @ viewport centre, and not the plus-code centre).
+  shop_lat: 24.7950505,
+  shop_lng: 46.7489991,
 
   hours: [
     { days: ['sat', 'sun', 'mon', 'tue', 'wed', 'thu'], opens: '08:00', closes: '23:30' },

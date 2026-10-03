@@ -21,6 +21,7 @@ npm run dev        # http://localhost:5173 (server-rendered, like production)
 npm run build      # writes static HTML for every page to dist/
 npm run preview    # serves dist/ at http://localhost:4173
 npm run typecheck
+npm run illustrations  # re-export the category illustrations after editing their SVGs
 ```
 
 Without Supabase keys the site builds from the seed data in `src/content/seed/`, so it works
@@ -35,10 +36,11 @@ out of the box. To use the real database, copy `.env.example` to `.env.local` an
 | `src/content/server.ts` | Build-time content source: Supabase if keys are set, otherwise the seed. |
 | `src/content/view.ts` | Turns bilingual rows into one-language page data. |
 | `src/content/seed/` | Seed content (single source of truth for `supabase/seed.sql`). Arabic copy to review is marked `// review-ar`. |
-| `src/lib/contact.ts` | WhatsApp / tel links and the exact message templates. |
+| `src/lib/contact.ts` | WhatsApp / tel / directions / map links and the WhatsApp message texts (per page type). |
 | `src/lib/lead-source.ts` | Keeps `gclid` / `gbraid` / `wbraid` / UTM tags for the session → `(WEB)` or `(WEB-AD)` in messages. |
 | `src/components/layout/` | Header, footer, sticky mobile WhatsApp/Call bar. |
 | `src/styles/index.css` | Brand colour tokens and the Tailwind theme. |
+| `design/illustrations/` | Original category illustrations (SVG sources). `npm run illustrations` exports them to `public/illustrations/` (PNG 800/400 + WebP 800/400/200, transparent). |
 | `supabase/migrations/` | Database schema with Row Level Security. |
 | `supabase/seed.sql` | Generated — run `npm run seed:sql` after editing `src/content/seed/`. |
 | `public/_redirects`, `public/_headers` | Cloudflare Pages redirect and header rules. |

@@ -1,5 +1,6 @@
 import { CalendarCheck, Clock, MapPin, MessageCircle, PackageCheck, Phone, Siren, Truck, Users, Wrench, type LucideIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { mapEmbedSrc } from '@/lib/contact'
 import { formatHours } from '@/lib/hours'
 import { CallLink, WhatsAppLink } from './ContactLinks'
 import { BrandIcon } from './icons/BrandIcon'
@@ -125,7 +126,8 @@ export function MapEmbed({ className = '' }: { className?: string }) {
   const t = useStrings()
   const box = useRef<HTMLDivElement>(null)
   const [show, setShow] = useState(false)
-  const src = `https://maps.google.com/maps?q=${site.geo.lat},${site.geo.lng}&z=16&hl=${site.lang}&output=embed`
+  // Pin on the shop's own Google listing marker (settings shop_lat / shop_lng).
+  const src = mapEmbedSrc(site.geo, site.lang)
   const frameClass = 'block aspect-[4/3] h-auto w-full border-0 sm:aspect-[16/10]'
 
   useEffect(() => {

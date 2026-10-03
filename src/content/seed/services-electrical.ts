@@ -9,8 +9,6 @@ export const electricalServices = defineServices('electrical', [
     short_ar: 'تركيب سبوت لايت جديد مع قص الجبس أو تغيير القديم، بجميع المقاسات الشائعة من 7 إلى 20 سم تقريبًا.', // review-ar
     short_en: 'New spotlights with gypsum cut-out, or replacing old ones — all common sizes from about 7 to 20 cm.',
     has_detail_page: true,
-    wa_extra_lines_ar: 'المقاس: \nالعدد: ', // review-ar
-    wa_extra_lines_en: 'Size: \nHow many: ',
     body_ar: [
       'نركّب سبوت لايت جديدًا في أسقف الجبس مع قص الفتحة بالمقاس الصحيح، أو نغيّر السبوتات القديمة والمحروقة بسبوتات ليد جديدة من محلنا.', // review-ar
       'نوفّر جميع المقاسات الشائعة من 7 سم إلى 20 سم تقريبًا، بأحجام صغيرة ووسط وكبيرة، وبألوان إضاءة مختلفة: أبيض ودافئ ومحايد.', // review-ar
@@ -82,8 +80,6 @@ export const electricalServices = defineServices('electrical', [
     short_ar: 'تركيب بانيل ليد سطحي دائري أو مربع، من الصغير إلى الكبير، أو تغيير القديم.', // review-ar
     short_en: 'Installing or replacing surface-mounted LED panels — round or square, small to large.',
     has_detail_page: true,
-    wa_extra_lines_ar: 'الشكل والمقاس: \nالعدد: ', // review-ar
-    wa_extra_lines_en: 'Shape and size: \nHow many: ',
     body_ar: [
       'البانيل السطحي يُركّب على السقف مباشرة دون فتحة في الجبس، ويناسب الغرف والممرات والمطابخ. نركّب البانيل الدائري أو المربع بأحجام من الصغير إلى الكبير.', // review-ar
       'نثبّت البانيل ونوصله ونجرّبه، ويمكننا تغيير البانيل القديم في نفس المكان.', // review-ar
@@ -131,8 +127,6 @@ export const electricalServices = defineServices('electrical', [
     short_ar: 'تغيير وتركيب اللمبات الدائرية والطويلة وجميع أنواع لمبات الليد.', // review-ar
     short_en: 'Changing and installing round, long (tube) and all types of LED bulbs.',
     has_detail_page: true,
-    wa_extra_lines_ar: 'نوع اللمبة: \nالعدد: ', // review-ar
-    wa_extra_lines_en: 'Bulb type: \nHow many: ',
     body_ar: [
       'نغيّر ونركّب اللمبات الدائرية والطويلة وجميع أنواع لمبات الليد، في الغرف والصالات والممرات والإنارة الخارجية.', // review-ar
       'يحضر الفني اللمبات من محلنا حسب النوع والعدد، ويفحص قاعدة اللمبة والتوصيل إذا كانت اللمبات تحترق بسرعة.', // review-ar
@@ -179,8 +173,6 @@ export const electricalServices = defineServices('electrical', [
     short_ar: 'تركيب فيش جديد أو تغيير الفيش التالف أو المحروق، مع فحص التوصيل والتأريض.', // review-ar
     short_en: 'Installing a new socket or replacing a damaged or burnt one, checking the wiring and earthing.',
     has_detail_page: true,
-    wa_extra_lines_ar: 'العدد: ', // review-ar
-    wa_extra_lines_en: 'How many: ',
     body_ar: [
       'نركّب فيشًا جديدًا أو نغيّر الفيش التالف أو المحروق أو المرتخي. الفيش المحروق خطر، فلا تتركه دون إصلاح.', // review-ar
       'نفصل الكهرباء عن الخط أولًا، ثم نركّب الفيش الجديد ونفحص التوصيل والتأريض قبل إعادة التشغيل.', // review-ar
@@ -309,8 +301,6 @@ export const electricalServices = defineServices('electrical', [
     name_en: 'Hidden LED strip installation (per meter)',
     short_ar: 'تركيب شريط ليد مخفي في تجاويف الجبس أو تحت الخزائن، ويُحسب بالمتر.', // review-ar
     short_en: 'Installing hidden LED strip in gypsum coves or under cabinets, charged per meter.',
-    wa_extra_lines_ar: 'الطول التقريبي بالمتر: ', // review-ar
-    wa_extra_lines_en: 'Approximate length (m): ',
   },
   {
     slug: 'small-chandelier-installation',

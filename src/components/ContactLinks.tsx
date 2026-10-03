@@ -1,5 +1,5 @@
 import type { AnchorHTMLAttributes, MouseEvent } from 'react'
-import { buildWhatsAppMessage, telHref, whatsappHref, type WhatsAppMessage } from '@/lib/contact'
+import { buildWhatsAppMessage, directionsHref, telHref, whatsappHref, type WhatsAppMessage } from '@/lib/contact'
 import { track } from '@/lib/track'
 import { useLeadTag, usePageType, useSite } from './site-context'
 
@@ -67,13 +67,13 @@ export function CallLink({ location, category, service, onClick, children, ...re
   )
 }
 
-/** Google Maps link to the shop; records a directions_click. */
+/** Google Maps directions to the shop's exact coordinates; records a directions_click. */
 export function DirectionsLink({ location, onClick, children, ...rest }: AnchorProps & TrackingProps) {
   const site = useSite()
   const onTrack = useTracker('directions_click', { location })
   return (
     <a
-      href={site.mapsUrl}
+      href={directionsHref(site.geo)}
       target="_blank"
       rel="noopener"
       onClick={(e: MouseEvent<HTMLAnchorElement>) => {

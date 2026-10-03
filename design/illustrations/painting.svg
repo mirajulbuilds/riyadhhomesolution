@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Riyadh Home Solution — Painting (original artwork): paint roller and an open paint can. -->
+  <defs>
+    <filter id="sticker" x="-10%" y="-10%" width="125%" height="125%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="7" result="spread"/>
+      <feFlood flood-color="#FFFFFF" result="white"/>
+      <feComposite in="white" in2="spread" operator="in" result="border"/>
+      <feOffset in="spread" dx="8" dy="10" result="off"/>
+      <feGaussianBlur in="off" stdDeviation="2.5" result="blur"/>
+      <feFlood flood-color="#0B2545" flood-opacity="0.2" result="ink"/>
+      <feComposite in="ink" in2="blur" operator="in" result="shadow"/>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="border"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- accents -->
+  <path d="M352 236 Q352 254 370 254 Q352 254 352 272 Q352 254 334 254 Q352 254 352 236 Z" fill="#F28C28" stroke="#0B2545" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M60 182 Q60 194 72 194 Q60 194 60 206 Q60 194 48 194 Q60 194 60 182 Z" fill="#3BA3D9" stroke="#0B2545" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="262" cy="200" r="6" fill="#3BA3D9"/>
+  <circle cx="52" cy="62" r="5" fill="#F28C28"/>
+  <circle cx="356" cy="330" r="4" fill="#0B2545" opacity="0.35"/>
+
+  <g filter="url(#sticker)" stroke="#0B2545" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- the stripe the roller just painted -->
+    <path d="M70 120 C112 90 150 134 186 104" fill="none" stroke="#0B2545" stroke-width="50"/>
+    <path d="M70 120 C112 90 150 134 186 104" fill="none" stroke="#BFE3F5" stroke-width="34"/>
+
+    <!-- roller: frame, handle, sleeve -->
+    <path d="M330 100 H348 Q356 100 356 108 V146 Q356 154 348 154 H306 V188" fill="none" stroke-width="9"/>
+    <rect x="296" y="180" width="20" height="16" rx="4" fill="#C9D6E3"/>
+    <rect x="292" y="194" width="28" height="104" rx="13" fill="#F28C28"/>
+    <path d="M299 226 H313 M299 242 H313 M299 258 H313" fill="none" stroke="#D9761A" stroke-width="5"/>
+    <rect x="176" y="72" width="160" height="56" rx="18" fill="#3BA3D9"/>
+    <path d="M196 88 H316" fill="none" stroke="#9FD3EE" stroke-width="7"/>
+    <path d="M206 128 V144 Q206 152 212 152 Q218 152 218 144 V128" fill="#3BA3D9" stroke-width="6"/>
+
+    <!-- open paint can -->
+    <path d="M76 212 A82 22 0 0 1 240 212" fill="none" stroke-width="7" transform="translate(0 -46) scale(1 1.2)"/>
+    <path d="M76 212 V326 A82 22 0 0 0 240 326 V212" fill="#E6ECF3"/>
+    <path d="M76 256 H240 V308 H76 Z" fill="#F28C28" stroke="none"/>
+    <path d="M76 256 H240 M76 308 H240" fill="none" stroke-width="6"/>
+    <path d="M118 284 C132 270 146 298 160 284 C174 270 188 298 202 284" fill="none" stroke="#FFFFFF" stroke-width="7"/>
+    <path d="M76 212 V326 A82 22 0 0 0 240 326 V212" fill="none"/>
+    <ellipse cx="158" cy="212" rx="82" ry="22" fill="#C9D6E3"/>
+    <ellipse cx="158" cy="212" rx="66" ry="14" fill="#3BA3D9"/>
+    <path d="M98 220 Q104 232 102 244 Q101 254 108 254 Q115 254 114 244 Q113 232 120 224 Z" fill="#3BA3D9" stroke-width="6"/>
+    <path d="M190 224 Q196 236 194 250 Q194 260 201 260 Q208 260 207 250 Q206 236 214 222 Z" fill="#3BA3D9" stroke-width="6"/>
+  </g>
+</svg>

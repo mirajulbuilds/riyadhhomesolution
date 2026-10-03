@@ -1,7 +1,7 @@
 import { ChevronLeft, MapPin } from 'lucide-react'
 import { Link, useLoaderData } from 'react-router-dom'
 import { AreasBlock } from '@/components/AreasMap'
-import { CategoryIcon, categoryTone } from '@/components/CategoryIcon'
+import { CategoryIllustration, categoryTone } from '@/components/CategoryIcon'
 import { CtaButtons } from '@/components/CtaButtons'
 import { Gallery } from '@/components/gallery/Gallery'
 import { HeroScene } from '@/components/home/HeroScene'
@@ -47,7 +47,8 @@ export function Component() {
               <TrustRow />
             </div>
           </div>
-          <div className="overflow-hidden rounded-[22px] bg-[#F6F2EB] shadow-[0_30px_60px_-30px_rgb(0_0_0/0.6)] ring-1 ring-white/10">
+          {/* The scene is never mirrored: identical in Arabic and English (only its column moves). */}
+          <div dir="ltr" style={{ direction: 'ltr' }} className="overflow-hidden rounded-[22px] bg-[#F6F2EB] shadow-[0_30px_60px_-30px_rgb(0_0_0/0.6)] ring-1 ring-white/10">
             <HeroScene label={t.home.sceneLabel} />
           </div>
         </div>
@@ -66,12 +67,12 @@ export function Component() {
               <li key={c.slug}>
                 <Link
                   to={localizePath(`/services/${c.slug}`, lang)}
-                  className="card group flex h-full flex-col p-6 transition-shadow hover:shadow-[0_18px_40px_-20px_rgb(11_37_69/0.4)]"
+                  className="card group flex h-full flex-col p-6 transition-[box-shadow,translate] hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgb(11_37_69/0.4)]"
                 >
-                  <span className={`grid size-14 place-items-center rounded-2xl ${tone.bg}`}>
-                    <CategoryIcon icon={c.icon} className={`size-7 ${tone.fg}`} />
+                  <span className={`relative grid size-28 place-items-center rounded-full ${tone.bg}`}>
+                    <CategoryIllustration src={c.imageUrl} icon={c.icon} size={112} className="art-bob size-28" />
                   </span>
-                  <h3 className="mt-5 text-xl font-bold">{c.name}</h3>
+                  <h3 className="mt-4 text-xl font-bold">{c.name}</h3>
                   <p className="mt-2 line-clamp-3 flex-1 text-sm/relaxed text-muted">{c.intro}</p>
                   <span className="mt-5 flex items-center justify-between text-sm font-semibold">
                     <span className="text-muted">{t.common.servicesCount(c.serviceCount)}</span>
@@ -92,10 +93,10 @@ export function Component() {
               <li key={c.slug}>
                 <Link
                   to={localizePath(`/services/${c.slug}`, lang)}
-                  className="card flex items-center gap-4 p-4 transition-shadow hover:shadow-[0_14px_30px_-18px_rgb(11_37_69/0.4)]"
+                  className="card group flex items-center gap-4 p-4 transition-[box-shadow,translate] hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-18px_rgb(11_37_69/0.4)]"
                 >
-                  <span className={`grid size-11 shrink-0 place-items-center rounded-xl ${tone.bg}`}>
-                    <CategoryIcon icon={c.icon} className={`size-5 ${tone.fg}`} />
+                  <span className={`grid size-16 shrink-0 place-items-center rounded-2xl ${tone.bg}`}>
+                    <CategoryIllustration src={c.imageUrl} icon={c.icon} size={64} className="art-bob size-16" />
                   </span>
                   <span className="min-w-0">
                     <span className="block font-bold text-navy">{c.name}</span>

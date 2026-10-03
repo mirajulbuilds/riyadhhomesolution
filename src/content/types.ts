@@ -32,7 +32,11 @@ export interface CategoryRow {
   covers_en: string[]
   faq: FaqRow[]
   icon: string | null
+  /** Category illustration; defaults to /illustrations/<slug>.png (sources in design/illustrations). */
   image_url: string | null
+  /** WhatsApp message on this category's page, e.g. «السلام عليكم، أحتاج فني سباكة.» */
+  wa_message_ar: string | null
+  wa_message_en: string | null
   sort_order: number
   is_active: boolean
   is_primary: boolean
@@ -59,9 +63,9 @@ export interface ServiceRow {
   parts_ar: string[]
   parts_en: string[]
   parts_in_stock: boolean
-  /** Extra lines added to the WhatsApp message, one per line, e.g. "المقاس: \nالعدد: ". */
-  wa_extra_lines_ar: string | null
-  wa_extra_lines_en: string | null
+  /** Optional custom WhatsApp message; empty → «السلام عليكم، أريد الاستفسار عن {name}.» */
+  wa_message_ar: string | null
+  wa_message_en: string | null
   image_url: string | null
   faq: FaqRow[]
   has_detail_page: boolean
@@ -177,8 +181,11 @@ export interface SettingsValues {
     country: string
   }
   plus_code: string
+  /** The shop's Google Business listing (short link). */
   maps_url: string
-  geo: { lat: number; lng: number }
+  /** The listing's own marker (the !3d/!4d values in its Google Maps URL): map pin, directions, JSON-LD geo. */
+  shop_lat: number
+  shop_lng: number
   hours: OpeningHours[]
   emergency: Bilingual
   since_year: number
@@ -222,6 +229,8 @@ export interface Faq {
 export interface Site {
   lang: Lang
   brand: string
+  /** The brand in the other language (JSON-LD alternateName). */
+  alternateBrand: string
   phoneDisplay: string
   phoneE164: string
   whatsappNumber: string
@@ -229,6 +238,7 @@ export interface Site {
   address: { street: string; district: string; city: string; postalCode: string; country: string }
   plusCode: string
   mapsUrl: string
+  /** Shop location (settings shop_lat / shop_lng). */
   geo: { lat: number; lng: number }
   hours: OpeningHours[]
   emergency: string
@@ -241,7 +251,7 @@ export interface Site {
   social: { name: 'facebook' | 'instagram' | 'tiktok' | 'snapchat'; url: string }[]
   googlePlaceId: string
   /** Category links for the header menu and footer. */
-  nav: { slug: string; name: string; isPrimary: boolean; icon: string | null }[]
+  nav: { slug: string; name: string; isPrimary: boolean; icon: string | null; imageUrl: string | null }[]
   buildYear: number
 }
 
@@ -253,6 +263,8 @@ export interface CategorySummary {
   icon: string | null
   imageUrl: string | null
   isPrimary: boolean
+  /** Ready WhatsApp text for this category ('' → the general message). */
+  waMessage: string
 }
 
 export interface Category extends CategorySummary {
@@ -270,7 +282,8 @@ export interface ServiceCard {
   hasDetailPage: boolean
   featured: boolean
   partsInStock: boolean
-  waExtraLines: string | null
+  /** Custom WhatsApp text, or null for the standard "I'd like to ask about: {name}." */
+  waMessage: string | null
 }
 
 export interface ServiceDetail extends ServiceCard {

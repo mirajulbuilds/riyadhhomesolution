@@ -36,7 +36,7 @@ on conflict (key) do nothing;
 insert into public.settings (key, value)
 values (
   'address',
-  '{"street":{"ar":"شارع أبي جعفر المنصور","en":"Abi Jafar Al Mansour St"},"district":{"ar":"حي غرناطة","en":"Ghirnatah"},"city":{"ar":"الرياض","en":"Riyadh"},"postal_code":"13242","country":"SA"}'::jsonb
+  '{"street":{"ar":"2886 شارع أبي جعفر المنصور","en":"2886 Abi Jafar Al Mansour St"},"district":{"ar":"حي غرناطة","en":"Ghirnatah"},"city":{"ar":"الرياض","en":"Riyadh"},"postal_code":"13242","country":"SA"}'::jsonb
 )
 on conflict (key) do nothing;
 
@@ -56,8 +56,15 @@ on conflict (key) do nothing;
 
 insert into public.settings (key, value)
 values (
-  'geo',
-  '{"lat":24.795088,"lng":46.749047}'::jsonb
+  'shop_lat',
+  '24.7950505'::jsonb
+)
+on conflict (key) do nothing;
+
+insert into public.settings (key, value)
+values (
+  'shop_lng',
+  '46.7489991'::jsonb
 )
 on conflict (key) do nothing;
 
@@ -147,7 +154,7 @@ on conflict (key) do nothing;
 
 -- Service categories
 
-insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, sort_order, is_active, is_primary)
+insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, wa_message_ar, wa_message_en, sort_order, is_active, is_primary)
 values (
   'plumbing',
   'السباكة',
@@ -162,14 +169,16 @@ values (
   array['Standard and concealed water heaters', 'Mixer taps, bidet sprayers and valves', 'Sink, basin and drain blockages', 'Basins, toilets and showers', 'Water pumps, submersible pumps and tank float valves', 'Washing machine connections']::text[],
   '[{"q_ar":"متى يصل السباك؟","a_ar":"نحدد الموعد معك عبر واتساب حسب جدول الفنيين، وفي الحالات الطارئة مثل التسريب الكبير نرسل فنيًا في أقرب وقت على مدار الساعة.","q_en":"When can the plumber come?","a_en":"We agree the time with you on WhatsApp based on the technicians’ schedule. For emergencies such as a major leak, we send a technician as soon as possible, day or night."},{"q_ar":"هل القطع متوفرة لديكم؟","a_ar":"نعم، معظم قطع السباكة من سخانات وخلاطات ومحابس ولّيات متوفرة في محلنا بغرناطة، فيحضرها الفني معه وينتهي العمل غالبًا في زيارة واحدة.","q_en":"Do you have the parts?","a_en":"Yes. Most plumbing parts — heaters, mixers, valves and hoses — are in stock at our Ghirnatah shop, so the technician brings them and the job is usually done in one visit."},{"q_ar":"كيف أعرف السعر؟","a_ar":"أرسل لنا الخدمة المطلوبة عبر واتساب، ويُفضّل مع صورة، ونؤكد لك السعر قبل بدء العمل.","q_en":"How do I get the price?","a_en":"Send us the service you need on WhatsApp, ideally with a photo, and we confirm the price before any work starts."}]'::jsonb,
   'droplet',
-  null,
+  '/illustrations/plumbing.png',
+  'السلام عليكم، أحتاج فني سباكة.',
+  'Hello, I need a plumber.',
   10,
   true,
   true
 )
 on conflict (slug) do nothing;
 
-insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, sort_order, is_active, is_primary)
+insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, wa_message_ar, wa_message_en, sort_order, is_active, is_primary)
 values (
   'electrical',
   'الكهرباء والإنارة',
@@ -184,14 +193,16 @@ values (
   array['Spotlights, panel lights and bulbs', 'Sockets and AC / water heater switches', 'Main and sub-panel breakers, fault finding', 'Chandeliers and hidden LED strips', 'Outdoor lights, flood lights and pole lights', 'Exhaust fans, doorbells and washer power points']::text[],
   '[{"q_ar":"المفتاح في الطبلون يفصل باستمرار، ماذا أفعل؟","a_ar":"لا تحاول تشغيله مرارًا. افصل الأجهزة عن الخط وتواصل معنا، ويفحص الفني سبب الفصل سواء كان حملًا زائدًا أو تماسًا أو مفتاحًا ضعيفًا.","q_en":"A breaker keeps tripping. What should I do?","a_en":"Don’t keep switching it back on. Unplug the devices on that line and contact us; the technician will find whether it’s an overload, a short or a weak breaker."},{"q_ar":"هل توفرون السبوت لايت والبانيل؟","a_ar":"نعم، السبوت لايت والبانيل واللمبات بمقاسات وألوان إضاءة مختلفة متوفرة في محلنا، ويحضرها الفني معه حسب طلبك.","q_en":"Do you supply the spotlights and panel lights?","a_en":"Yes. Spotlights, panel lights and bulbs in many sizes and light colours are in stock at our shop, and the technician brings what you need."},{"q_ar":"كيف أعرف السعر؟","a_ar":"أرسل لنا الخدمة والعدد أو المقاس عبر واتساب، ويُفضّل مع صورة، ونؤكد لك السعر قبل بدء العمل.","q_en":"How do I get the price?","a_en":"Send us the service and the quantity or size on WhatsApp, ideally with a photo, and we confirm the price before any work starts."}]'::jsonb,
   'zap',
-  null,
+  '/illustrations/electrical.png',
+  'السلام عليكم، أحتاج فني كهرباء.',
+  'Hello, I need an electrician.',
   20,
   true,
   true
 )
 on conflict (slug) do nothing;
 
-insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, sort_order, is_active, is_primary)
+insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, wa_message_ar, wa_message_en, sort_order, is_active, is_primary)
 values (
   'cctv-intercom-network',
   'الكاميرات والإنتركم والشبكات',
@@ -206,14 +217,16 @@ values (
   array['Indoor and outdoor security cameras', 'Door cameras and intercoms: install, repair, replace', 'Weak network checks, routers and extenders', 'Network cabling and Wi-Fi devices', 'TV, speaker and PBX systems', 'Assistance systems for people with special needs']::text[],
   '[{"q_ar":"ما أنواع الكاميرات التي تركبونها؟","a_ar":"نركّب جميع الأنواع حسب اختيار العميل، ويمكننا أن نقترح عليك الأنسب لمساحة البيت وعدد المداخل.","q_en":"Which camera brands do you install?","a_en":"All brands, according to the customer’s choice. We can also suggest what suits the size of your home and the number of entrances."},{"q_ar":"هل أستطيع مشاهدة الكاميرات من جوالي؟","a_ar":"نعم، نضبط التطبيق على جوالك قبل أن نغادر ونشرح لك طريقة المشاهدة والرجوع إلى التسجيلات.","q_en":"Can I watch the cameras on my phone?","a_en":"Yes. We set up the app on your phone before we leave and show you how to view live video and recordings."},{"q_ar":"كيف أعرف السعر؟","a_ar":"أرسل لنا عدد الكاميرات أو نوع الخدمة وصورًا للمكان عبر واتساب، ونؤكد لك السعر قبل بدء العمل.","q_en":"How do I get the price?","a_en":"Send us the number of cameras or the service you need, with photos of the place, on WhatsApp and we confirm the price before work starts."}]'::jsonb,
   'cctv',
-  null,
+  '/illustrations/cctv-intercom-network.png',
+  'السلام عليكم، أحتاج فني كاميرات وإنتركم وشبكات.',
+  'Hello, I need a CCTV, intercom and network technician.',
   30,
   true,
   true
 )
 on conflict (slug) do nothing;
 
-insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, sort_order, is_active, is_primary)
+insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, wa_message_ar, wa_message_en, sort_order, is_active, is_primary)
 values (
   'painting',
   'الدهانات',
@@ -228,14 +241,16 @@ values (
   array['Wall preparation and minor crack filling', 'Interior painting for rooms and halls', 'Exterior painting for facades and boundary walls', 'Floor and furniture protection while we work']::text[],
   '[{"q_ar":"هل توفرون الدهان أم أشتريه بنفسي؟","a_ar":"يمكنك اختيار الدهان بنفسك، أو نخبرك بالكمية المناسبة لمساحتك قبل البدء.","q_en":"Do you supply the paint or should I buy it?","a_en":"You can choose the paint yourself, or we tell you the right quantity for your area before we start."}]'::jsonb,
   'paint-roller',
-  null,
+  '/illustrations/painting.png',
+  'السلام عليكم، أحتاج خدمة دهانات.',
+  'Hello, I need a painting service.',
   40,
   true,
   false
 )
 on conflict (slug) do nothing;
 
-insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, sort_order, is_active, is_primary)
+insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, wa_message_ar, wa_message_en, sort_order, is_active, is_primary)
 values (
   'tiles',
   'البلاط',
@@ -250,14 +265,16 @@ values (
   array['New floor tiles', 'Old tile removal and new tiling', 'Kitchen and bathroom wall tiles', 'Levelling, falls and grouting']::text[],
   '[{"q_ar":"هل توفرون البلاط؟","a_ar":"يمكنك اختيار البلاط بنفسك، ونخبرك بالكمية المناسبة بعد معرفة المساحة.","q_en":"Do you supply the tiles?","a_en":"You can choose the tiles yourself, and we tell you the quantity you need once we know the area."}]'::jsonb,
   'grid',
-  null,
+  '/illustrations/tiles.png',
+  'السلام عليكم، أحتاج فني تركيب بلاط.',
+  'Hello, I need a tile installer.',
   50,
   true,
   false
 )
 on conflict (slug) do nothing;
 
-insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, sort_order, is_active, is_primary)
+insert into public.categories (slug, name_ar, name_en, headline_ar, headline_en, intro_ar, intro_en, meta_description_ar, meta_description_en, covers_ar, covers_en, faq, icon, image_url, wa_message_ar, wa_message_en, sort_order, is_active, is_primary)
 values (
   'cleaning',
   'التنظيف',
@@ -272,7 +289,9 @@ values (
   array['Ground and roof water tanks', 'New and furnished apartments and villas', 'Paint stain removal from floors', 'Carpet glue removal']::text[],
   '[{"q_ar":"كم مرة يُنصح بتنظيف خزان الماء؟","a_ar":"يُنصح بتنظيف الخزان مرة أو مرتين في السنة على الأقل، أو عند ملاحظة رواسب أو تغيّر في لون الماء.","q_en":"How often should a water tank be cleaned?","a_en":"At least once or twice a year, or whenever you notice sediment or a change in the water’s colour."}]'::jsonb,
   'sparkles',
-  null,
+  '/illustrations/cleaning.png',
+  'السلام عليكم، أحتاج خدمة تنظيف.',
+  'Hello, I need a cleaning service.',
   60,
   true,
   false
@@ -281,7 +300,7 @@ on conflict (slug) do nothing;
 
 -- Services
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'new-water-heater-installation',
@@ -319,7 +338,7 @@ Send us the heater size you want and where it goes on WhatsApp, and we confirm t
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'new-concealed-water-heater-installation',
@@ -357,7 +376,7 @@ Send us a photo of the ceiling or access hatch on WhatsApp, and we confirm the p
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'water-heater-replacement',
@@ -395,7 +414,7 @@ Send us the size of your current heater and a photo of it on WhatsApp, and we co
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'concealed-water-heater-replacement',
@@ -425,7 +444,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'water-heater-thermostat-replacement',
@@ -455,7 +474,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'water-heater-element-replacement',
@@ -485,7 +504,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'mixer-tap-replacement',
@@ -519,7 +538,7 @@ We remove the old mixer, clean the mounting point, fit the new one with the righ
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'bidet-sprayer-replacement',
@@ -549,7 +568,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'shower-head-replacement',
@@ -579,7 +598,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'angle-valve-hose-replacement',
@@ -609,7 +628,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'basin-waste-replacement',
@@ -639,7 +658,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'sink-basin-blockage-clearing',
@@ -677,7 +696,7 @@ If the blockage keeps coming back, we check the drain line and tell you the caus
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'drain-blockage-clearing',
@@ -715,7 +734,7 @@ For overflowing drains or strong smells, call us straight away — emergency ser
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'tank-float-valve-replacement',
@@ -745,7 +764,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'water-pump-installation',
@@ -775,7 +794,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'submersible-pump-installation',
@@ -805,7 +824,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'toilet-seat-cover-replacement',
@@ -835,7 +854,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'western-toilet-installation',
@@ -865,7 +884,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'squat-toilet-installation',
@@ -895,7 +914,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'squat-toilet-cistern-installation',
@@ -925,7 +944,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'basin-installation',
@@ -955,7 +974,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'vanity-basin-installation',
@@ -985,7 +1004,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'double-vanity-installation',
@@ -1015,7 +1034,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'shower-set-installation',
@@ -1045,7 +1064,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'shower-cabin-installation',
@@ -1075,7 +1094,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'floor-drain-installation',
@@ -1105,7 +1124,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'plumbing'),
   'washing-machine-connection',
@@ -1135,7 +1154,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'spotlight-installation-replacement',
@@ -1162,10 +1181,8 @@ Send us the size and how many on WhatsApp, or a photo of the ceiling, and we con
   array['سبوت لايت ليد بمقاسات من 7 إلى 20 سم تقريبًا', 'ألوان إضاءة: أبيض ودافئ ومحايد', 'محولات (درايفر) ووصلات']::text[],
   array['LED spotlights from about 7 to 20 cm', 'Light colours: cool white, warm and neutral', 'Drivers and connectors']::text[],
   true,
-  'المقاس: 
-العدد: ',
-  'Size: 
-How many: ',
+  null,
+  null,
   null,
   '[{"q_ar":"ماذا لو كان مقاس الفتحة القديمة مختلفًا؟","a_ar":"نوسّع الفتحة إذا كان السبوت الجديد أكبر، أو نركّب سبوتًا بمقاس يناسب الفتحة الحالية. أرسل لنا صورة ونقترح الأنسب.","q_en":"What if the old opening is a different size?","a_en":"We widen the opening if the new spotlight is bigger, or fit one that matches the existing opening. Send us a photo and we’ll suggest the best fit."},{"q_ar":"هل تحضرون السبوتات معكم؟","a_ar":"نعم، السبوتات متوفرة في محلنا بمقاسات وألوان مختلفة، ويحضرها الفني معه حسب طلبك.","q_en":"Do you bring the spotlights?","a_en":"Yes. Spotlights in many sizes and colours are in stock at our shop, and the technician brings what you ask for."}]'::jsonb,
   true,
@@ -1175,7 +1192,7 @@ How many: ',
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'surface-panel-light',
@@ -1198,10 +1215,8 @@ We fix, wire and test the panel, and can replace an old panel in the same spot.'
   array['بانيل ليد سطحي دائري ومربع', 'ألوان إضاءة مختلفة', 'وصلات وبراغي تثبيت']::text[],
   array['Round and square surface LED panels', 'Different light colours', 'Connectors and fixings']::text[],
   true,
-  'الشكل والمقاس: 
-العدد: ',
-  'Shape and size: 
-How many: ',
+  null,
+  null,
   null,
   '[{"q_ar":"ما الفرق بين البانيل السطحي والغاطس؟","a_ar":"السطحي يُركّب فوق السقف دون قص، أما الغاطس فيحتاج فتحة في الجبس. إذا كانت عندك فتحة قديمة أخبرنا لنختار المناسب.","q_en":"What is the difference between surface and recessed panels?","a_en":"A surface panel mounts on the ceiling without cutting; a recessed one needs a gypsum opening. If you already have an opening, tell us and we’ll pick the right one."}]'::jsonb,
   true,
@@ -1211,7 +1226,7 @@ How many: ',
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'light-bulb-change-installation',
@@ -1234,10 +1249,8 @@ The technician brings the bulbs from our shop by type and quantity, and checks t
   array['لمبات ليد بأنواع وقدرات مختلفة', 'لمبات طويلة وقواعدها', 'قواعد لمبات']::text[],
   array['LED bulbs in different types and wattages', 'Tube lights and their fittings', 'Lamp holders']::text[],
   true,
-  'نوع اللمبة: 
-العدد: ',
-  'Bulb type: 
-How many: ',
+  null,
+  null,
   null,
   '[{"q_ar":"لماذا تحترق اللمبة بسرعة؟","a_ar":"قد يكون السبب في قاعدة اللمبة أو في التوصيل أو تذبذب الكهرباء. يفحص الفني ذلك عند التغيير ويخبرك بالسبب.","q_en":"Why do my bulbs burn out quickly?","a_en":"It can be the lamp holder, the wiring or voltage fluctuation. The technician checks this while changing the bulb and tells you the cause."}]'::jsonb,
   true,
@@ -1247,7 +1260,7 @@ How many: ',
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'socket-installation',
@@ -1270,8 +1283,8 @@ We isolate the circuit first, fit the new socket, and check the wiring and earth
   array['أفياش مفردة ومزدوجة', 'أفياش بمنافذ USB', 'علب ووصلات']::text[],
   array['Single and double sockets', 'Sockets with USB ports', 'Back boxes and connectors']::text[],
   true,
-  'العدد: ',
-  'How many: ',
+  null,
+  null,
   null,
   '[{"q_ar":"الفيش يسخن أو عليه آثار حرق، هل هذا خطر؟","a_ar":"نعم، افصل الأجهزة عنه ولا تستخدمه، وتواصل معنا. خدمة الطوارئ متاحة على مدار الساعة.","q_en":"My socket gets hot or has burn marks. Is it dangerous?","a_en":"Yes. Unplug everything, stop using it and contact us. Emergency service is available 24/7."}]'::jsonb,
   true,
@@ -1281,7 +1294,7 @@ We isolate the circuit first, fit the new socket, and check the wiring and earth
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'ac-heater-switch',
@@ -1311,7 +1324,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'exhaust-fan-installation',
@@ -1341,7 +1354,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'doorbell-replacement',
@@ -1371,7 +1384,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'main-breaker-replacement',
@@ -1405,7 +1418,7 @@ The technician checks the loads and connections first, because repeated tripping
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'sub-breaker-replacement',
@@ -1435,7 +1448,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'outdoor-wall-light-replacement',
@@ -1465,7 +1478,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'hidden-led-strip',
@@ -1484,8 +1497,8 @@ values (
   '{}'::text[],
   '{}'::text[],
   true,
-  'الطول التقريبي بالمتر: ',
-  'Approximate length (m): ',
+  null,
+  null,
   null,
   '[]'::jsonb,
   false,
@@ -1495,7 +1508,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'small-chandelier-installation',
@@ -1525,7 +1538,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'large-chandelier-installation',
@@ -1555,7 +1568,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'street-pole-light-installation',
@@ -1585,7 +1598,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'wall-flood-light',
@@ -1615,7 +1628,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'washer-dryer-power-point',
@@ -1645,7 +1658,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'electrical-panel-inspection',
@@ -1683,7 +1696,7 @@ A burning smell or sparks is an emergency: switch off the main breaker and call 
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'electrical'),
   'indoor-panel-installation',
@@ -1713,7 +1726,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'new-cctv-installation',
@@ -1740,8 +1753,8 @@ Send us roughly how many cameras you need and photos of the place on WhatsApp, a
   array['كاميرات داخلية وخارجية حسب اختيار العميل', 'أجهزة تسجيل وأقراص تخزين', 'كابلات ووصلات ومحولات']::text[],
   array['Indoor and outdoor cameras of the customer’s choice', 'Recorders and storage drives', 'Cables, connectors and power adapters']::text[],
   true,
-  'عدد الكاميرات: ',
-  'Number of cameras: ',
+  null,
+  null,
   null,
   '[{"q_ar":"هل أستطيع مشاهدة الكاميرات من جوالي؟","a_ar":"نعم، نضبط التطبيق على جوالك قبل أن نغادر ونشرح لك طريقة المشاهدة والرجوع إلى التسجيلات.","q_en":"Can I watch the cameras on my phone?","a_en":"Yes. We set up the app on your phone before we leave and show you how to view live video and recordings."}]'::jsonb,
   true,
@@ -1751,7 +1764,7 @@ Send us roughly how many cameras you need and photos of the place on WhatsApp, a
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'cctv-replacement',
@@ -1781,7 +1794,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'door-camera-installation',
@@ -1815,7 +1828,7 @@ We choose the right mounting spot, connect power and Wi-Fi, and test the alerts 
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'new-intercom-installation',
@@ -1845,7 +1858,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'intercom-repair',
@@ -1879,7 +1892,7 @@ If the faulty part is available we replace it; if a repair isn’t worth it, we 
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'intercom-replacement',
@@ -1909,7 +1922,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'weak-network-check',
@@ -1939,7 +1952,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'router-extender-setup',
@@ -1969,7 +1982,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'network-cabling',
@@ -1999,7 +2012,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'wifi-device-installation',
@@ -2029,7 +2042,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'tv-system-installation',
@@ -2059,7 +2072,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'speaker-system-installation',
@@ -2089,7 +2102,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'pbx-installation',
@@ -2119,7 +2132,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cctv-intercom-network'),
   'special-needs-system',
@@ -2149,7 +2162,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'painting'),
   'interior-painting',
@@ -2179,7 +2192,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'painting'),
   'exterior-painting',
@@ -2209,7 +2222,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'tiles'),
   'new-floor-tiles',
@@ -2239,7 +2252,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'tiles'),
   'floor-tile-removal-new',
@@ -2269,7 +2282,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'tiles'),
   'wall-tiles-kitchen-bathroom',
@@ -2299,7 +2312,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'tiles'),
   'wall-tile-removal-new',
@@ -2329,7 +2342,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cleaning'),
   'water-tank-cleaning',
@@ -2359,7 +2372,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cleaning'),
   'new-apartment-cleaning',
@@ -2389,7 +2402,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cleaning'),
   'furnished-apartment-cleaning',
@@ -2419,7 +2432,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cleaning'),
   'general-cleaning',
@@ -2449,7 +2462,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cleaning'),
   'paint-stain-removal',
@@ -2479,7 +2492,7 @@ values (
 )
 on conflict (category_id, slug) do nothing;
 
-insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_extra_lines_ar, wa_extra_lines_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
+insert into public.services (category_id, slug, name_ar, name_en, short_ar, short_en, body_ar, body_en, includes_ar, includes_en, excludes_ar, excludes_en, options_ar, options_en, parts_ar, parts_en, parts_in_stock, wa_message_ar, wa_message_en, image_url, faq, has_detail_page, featured, sort_order, is_active)
 values (
   (select id from public.categories where slug = 'cleaning'),
   'carpet-glue-removal',

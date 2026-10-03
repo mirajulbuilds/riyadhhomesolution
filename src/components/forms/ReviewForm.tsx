@@ -2,6 +2,7 @@ import { CheckCircle2, Star } from 'lucide-react'
 import { useId, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { localizePath } from '@/i18n/lang'
+import { normalizePhone } from '@/lib/phone'
 import { track } from '@/lib/track'
 import { WhatsAppLink } from '../ContactLinks'
 import { BrandIcon } from '../icons/BrandIcon'
@@ -12,11 +13,12 @@ const MAX_NAME = 80
 const MAX_BODY = 2000
 const MAX_PHOTO = 10 * 1024 * 1024
 
-type Errors = Partial<Record<'name' | 'rating' | 'body' | 'photo' | 'form', string>>
+type Errors = Partial<Record<'name' | 'phone' | 'rating' | 'body' | 'photo' | 'form', string>>
 
 /**
- * Website review form (brief §6.6): name, area, service, 1–5 stars, text, optional photo.
- * Spam control: a hidden honeypot field here, plus the database rate limit.
+ * Website review form (brief §6.6): name, phone (required, private), area, service, 1–5 stars,
+ * text, optional photo. Spam control: a hidden honeypot field here, plus the database rate
+ * limits (per connection, and one review per phone number per 30 days).
  */
 export function ReviewForm({ serviceOptions }: { serviceOptions: { category: string; services: string[] }[] }) {
   const site = useSite()
@@ -33,6 +35,8 @@ export function ReviewForm({ serviceOptions }: { serviceOptions: { category: str
     const form = e.currentTarget
     const data = new FormData(form)
     const name = String(data.get('name') ?? '').trim()
+    const phoneInput = String(data.get('phone') ?? '').trim()
+    const phone = normalizePhone(phoneInput)
     const body = String(data.get('body') ?? '').trim()
     const area = String(data.get('area') ?? '')
     const service = String(data.get('service') ?? '')
@@ -42,16 +46,18 @@ export function ReviewForm({ serviceOptions }: { serviceOptions: { category: str
     const next: Errors = {}
     if (!name) next.name = f.required
     else if (name.length > MAX_NAME) next.name = f.tooLong(MAX_NAME)
+    if (!phoneInput) next.phone = f.required
+    else if (!phone) next.phone = f.phoneInvalid
     if (rating < 1) next.rating = f.ratingRequired
     if (!body) next.body = f.required
     else if (body.length > MAX_BODY) next.body = f.tooLong(MAX_BODY)
     if (file && !file.type.startsWith('image/')) next.photo = f.photoType
     else if (file && file.size > MAX_PHOTO) next.photo = f.photoTooBig
     setErrors(next)
-    const first = (['name', 'rating', 'body', 'photo'] as const).find((k) => next[k])
-    if (first) {
+    const first = (['name', 'phone', 'rating', 'body', 'photo'] as const).find((k) => next[k])
+    if (first || !phone) {
       // Focus the first problem (by name: React hasn't re-rendered the error state yet).
-      const el = form.elements.namedItem(first)
+      const el = form.elements.namedItem(first ?? 'phone')
       ;(el instanceof RadioNodeList ? (el[0] as HTMLElement | undefined) : (el as HTMLElement | null))?.focus()
       return
     }
@@ -65,14 +71,19 @@ export function ReviewForm({ serviceOptions }: { serviceOptions: { category: str
     setStatus('sending')
     try {
       const { submitReview } = await import('@/lib/reviews')
-      await submitReview({ name, body, rating, district: area || null, service: service || null, photo: file })
+      await submitReview({ name, phone, body, rating, district: area || null, service: service || null, photo: file })
       track('review_submit', { language: site.lang, page_type: pageType, link_location: 'review_form' })
       form.reset()
       setRating(0)
       setStatus('done')
     } catch (err) {
       const reason = (err as { reason?: string }).reason
-      setErrors({ form: reason === 'rate_limited' ? f.rateLimited : reason === 'unavailable' ? f.unavailable : f.failed })
+      if (reason === 'phone_limited') {
+        setErrors({ phone: f.phoneLimited })
+        ;(form.elements.namedItem('phone') as HTMLElement | null)?.focus()
+      } else {
+        setErrors({ form: reason === 'rate_limited' ? f.rateLimited : reason === 'unavailable' ? f.unavailable : f.failed })
+      }
       setStatus('idle')
     }
   }
@@ -93,6 +104,22 @@ export function ReviewForm({ serviceOptions }: { serviceOptions: { category: str
     <form onSubmit={onSubmit} noValidate className="card space-y-5 p-6 sm:p-8">
       <Field id={`${uid}-name`} label={f.name} error={errors.name} required>
         {(p) => <input {...p} name="name" type="text" autoComplete="given-name" maxLength={MAX_NAME + 20} className={inputClass} />}
+      </Field>
+
+      <Field id={`${uid}-phone`} label={f.phone} hint={f.phoneHint} error={errors.phone} required>
+        {(p) => (
+          <input
+            {...p}
+            name="phone"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            dir="ltr"
+            placeholder="05XXXXXXXX"
+            maxLength={24}
+            className={`${inputClass} rtl:text-right`}
+          />
+        )}
       </Field>
 
       <div className="grid gap-5 sm:grid-cols-2">

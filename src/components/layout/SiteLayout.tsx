@@ -5,6 +5,7 @@ import plexArabic700 from '@/assets/fonts/plex-arabic-700.woff2?url'
 import type { LayoutData } from '@/content/view'
 import { dirOf, type Lang } from '@/i18n/lang'
 import { strings } from '@/i18n/strings'
+import { BusinessJsonLd } from '../BusinessJsonLd'
 import { SiteProvider } from '../site-context'
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -23,6 +24,7 @@ export function SiteLayout({ lang }: { lang: Lang }) {
         {lang === 'ar' && <link rel="preload" href={plexArabic400} as="font" type="font/woff2" crossOrigin="" />}
         {lang === 'ar' && <link rel="preload" href={plexArabic700} as="font" type="font/woff2" crossOrigin="" />}
       </Head>
+      <BusinessJsonLd />
       <a href="#main" className="skip-link">
         {t.skipToContent}
       </a>

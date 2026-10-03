@@ -2,89 +2,72 @@ import type { Lang } from '@/i18n/lang'
 import type { LeadTag } from './lead-source'
 
 /*
- * WhatsApp and phone links. Message templates follow PROJECT_BRIEF.md §7 exactly — the
- * owner reads these messages on WhatsApp, so keep the line order and labels stable.
+ * WhatsApp, phone and map links.
+ *
+ * WhatsApp messages are short and natural, in the page language, with no empty fields to fill
+ * in: one sentence that fits the page, then the lead tag — (WEB) or (WEB-AD) — on its own last
+ * line. The customer can edit the text before sending. Texts approved by the owner (2026-10).
  */
 
 export type WhatsAppMessage =
-  /** A service card / detail page / category page. */
-  | { kind: 'service'; name: string; extraLines?: string | null }
-  /** "Ask on WhatsApp" for a product. */
-  | { kind: 'product'; name: string }
-  /** "Didn't find your service? Describe it to us." `category` is optional context. */
-  | { kind: 'describe'; category?: string }
-  /** Header, sticky bar and other general buttons. */
+  /** Home, About, Contact, Reviews, Products, Our Work, 404 and any other general button. */
   | { kind: 'general' }
-  /** Contact-page "Request a visit" form. */
+  /** A category page: the category's own message (categories.wa_message_*); blank → general. */
+  | { kind: 'category'; message: string | null | undefined }
+  /** A service page or card. `custom` is the service's optional wa_message_* override. */
+  | { kind: 'service'; name: string; custom?: string | null }
+  /** "Ask on WhatsApp" for a product (or a product section). */
+  | { kind: 'product'; name: string }
+  /** Contact-page "Request a visit" form: composed from the fields the visitor filled in. */
   | { kind: 'visit'; name: string; district: string; service: string; description: string }
 
-const labels = {
+const texts = {
   ar: {
-    greeting: 'السلام عليكم',
-    needService: 'أحتاج خدمة',
-    askAbout: 'أسأل عن',
-    district: 'الحي',
-    time: 'الوقت المناسب',
+    general: 'السلام عليكم، أحتاج إلى فني.',
+    service: (name: string) => `السلام عليكم، أريد الاستفسار عن ${name}.`,
+    product: (name: string) => `السلام عليكم، أريد الاستفسار عن: ${name}.`,
+    visit: (service: string) => `السلام عليكم، أحتاج خدمة: ${service}`,
     name: 'الاسم',
+    district: 'الحي',
     description: 'الوصف',
-    footer: '— من موقع رياض هوم سوليوشن',
   },
   en: {
-    greeting: 'Hi',
-    needService: 'I need',
-    askAbout: "I'd like to ask about",
-    district: 'Area',
-    time: 'Preferred time',
+    general: 'Hello, I need a technician.',
+    service: (name: string) => `Hello, I'd like to ask about: ${name}.`,
+    product: (name: string) => `Hello, I'd like to ask about: ${name}.`,
+    visit: (service: string) => `Hello, I need: ${service}`,
     name: 'Name',
+    district: 'Area',
     description: 'Details',
-    footer: '— from the Riyadh Home Solution website',
   },
 } as const
 
-/** Normalises user-entered extra lines ("Size: \nHow many: ") to clean lines. */
-function extraLinesOf(text: string | null | undefined): string[] {
-  return (text ?? '')
-    .split(/\r?\n/)
-    .map((line) => line.trimEnd())
-    .filter((line) => line.trim() !== '')
-    .map((line) => (line.endsWith(':') ? `${line} ` : line))
-}
-
-export function buildWhatsAppMessage(message: WhatsAppMessage, lang: Lang, tag: LeadTag): string {
-  const t = labels[lang]
-  const comma = lang === 'ar' ? '،' : ','
-  const footer = `${t.footer} ${tag}`
-
+/** The message body for `lang`, without the lead tag. */
+function messageBody(message: WhatsAppMessage, lang: Lang): string {
+  const t = texts[lang]
   switch (message.kind) {
+    case 'general':
+      return t.general
+    case 'category':
+      return message.message?.trim() || t.general
+    case 'service':
+      return message.custom?.trim() || t.service(message.name.trim())
     case 'product':
-      return [`${t.greeting}${comma} ${t.askAbout}: ${message.name}`, footer].join('\n')
-
+      return t.product(message.name.trim())
     case 'visit':
+      // Only the fields the visitor actually filled in.
       return [
-        `${t.greeting}${comma} ${t.needService}: ${message.service}`,
+        t.visit(message.service),
         `${t.name}: ${message.name}`,
         `${t.district}: ${message.district}`,
-        `${t.description}: ${message.description}`,
-        `${t.time}: `,
-        footer,
+        ...(message.description.trim() ? [`${t.description}: ${message.description.trim()}`] : []),
       ].join('\n')
-
-    case 'describe':
-    case 'general':
-    case 'service': {
-      const service =
-        message.kind === 'service' ? message.name : message.kind === 'describe' ? (message.category ?? '') : ''
-      return [
-        // With no service name the line ends in ": " so the customer can type straight after it.
-        `${t.greeting}${comma} ${t.needService}: ${service}`,
-        ...(message.kind === 'service' ? extraLinesOf(message.extraLines) : []),
-        ...(message.kind === 'describe' ? [`${t.description}: `] : []),
-        `${t.district}: `,
-        `${t.time}: `,
-        footer,
-      ].join('\n')
-    }
   }
+}
+
+/** Full WhatsApp text: the message, then the lead tag on its own line. */
+export function buildWhatsAppMessage(message: WhatsAppMessage, lang: Lang, tag: LeadTag): string {
+  return `${messageBody(message, lang)}\n${tag}`
 }
 
 /** https://wa.me/<digits>?text=<encoded message> */
@@ -95,4 +78,16 @@ export function whatsappHref(number: string, text: string): string {
 /** tel:+966500569163 */
 export function telHref(e164: string): string {
   return `tel:${e164.replace(/[^\d+]/g, '')}`
+}
+
+type LatLng = { lat: number; lng: number }
+
+/** Google Maps directions with the shop's exact coordinates as the destination. */
+export function directionsHref({ lat, lng }: LatLng): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
+}
+
+/** Keyless Google Maps embed with a pin on the shop's coordinates. */
+export function mapEmbedSrc({ lat, lng }: LatLng, lang: Lang, zoom = 17): string {
+  return `https://maps.google.com/maps?q=${lat},${lng}&z=${zoom}&hl=${lang}&output=embed`
 }

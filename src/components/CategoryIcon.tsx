@@ -26,7 +26,7 @@ export function CategoryIcon({ icon, className }: { icon: string | null; classNa
   return <Icon aria-hidden="true" className={className} />
 }
 
-/** Square category illustration: tinted tile, white disc, large icon, a few decorative shapes. */
+/** Square category art built from the icon — the fallback when a category has no illustration. */
 export function CategoryArt({ icon, className = '' }: { icon: string | null; className?: string }) {
   const tone = categoryTone(icon)
   return (
@@ -39,5 +39,51 @@ export function CategoryArt({ icon, className = '' }: { icon: string | null; cla
         <CategoryIcon icon={icon} className={`size-[46%] ${tone.fg}`} />
       </span>
     </div>
+  )
+}
+
+/** Our own exported illustrations: /illustrations/<name>.png, with -400 and .webp (-200/-400/800) variants beside it. */
+const LOCAL_ILLUSTRATION = /^\/illustrations\/([a-z0-9-]+)\.png$/
+
+/**
+ * The category's sticker illustration (transparent PNG/WebP, never mirrored in RTL), or the icon
+ * art when no image is set. `size` is the largest CSS width it is shown at (for `sizes`); the
+ * className sets the actual size. Decorative: the category name is always next to it.
+ */
+export function CategoryIllustration({
+  src,
+  icon,
+  size,
+  sizes,
+  eager = false,
+  className = '',
+}: {
+  src: string | null
+  icon: string | null
+  size: number
+  /** Override for responsive layouts; defaults to "<size>px". */
+  sizes?: string
+  eager?: boolean
+  className?: string
+}) {
+  if (!src) return <CategoryArt icon={icon} className={className} />
+  const img = {
+    alt: '',
+    width: size,
+    height: size,
+    loading: eager ? ('eager' as const) : ('lazy' as const),
+    decoding: 'async' as const,
+    className: `block object-contain ${className}`,
+  }
+  const local = LOCAL_ILLUSTRATION.exec(src)
+  if (!local) return <img src={src} {...img} />
+  const base = `/illustrations/${local[1]}`
+  const sizesAttr = sizes ?? `${size}px`
+  return (
+    // display: contents — the <img> sizes against the parent (size-full works), not the <picture>.
+    <picture className="contents">
+      <source type="image/webp" srcSet={`${base}-200.webp 200w, ${base}-400.webp 400w, ${base}.webp 800w`} sizes={sizesAttr} />
+      <img src={src} srcSet={`${base}-400.png 400w, ${base}.png 800w`} sizes={sizesAttr} {...img} />
+    </picture>
   )
 }

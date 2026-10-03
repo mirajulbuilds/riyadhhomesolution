@@ -9,10 +9,11 @@ export interface Crumb {
   to?: string
 }
 
-export function Breadcrumbs({ items }: { items: Crumb[] }) {
+/** `inverted`: light text, for a navy band. */
+export function Breadcrumbs({ items, inverted = false }: { items: Crumb[]; inverted?: boolean }) {
   const t = useStrings()
   return (
-    <nav aria-label={t.breadcrumb} className="text-sm text-muted">
+    <nav aria-label={t.breadcrumb} className={`text-sm ${inverted ? 'text-white/70' : 'text-muted'}`}>
       <ol className="flex flex-wrap items-center gap-1.5">
         {items.map((item, i) => (
           <Fragment key={`${item.label}-${i}`}>
@@ -23,11 +24,11 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
             )}
             <li>
               {item.to ? (
-                <Link to={item.to} className="hover:text-navy hover:underline">
+                <Link to={item.to} className={`hover:underline ${inverted ? 'hover:text-white' : 'hover:text-navy'}`}>
                   {item.label}
                 </Link>
               ) : (
-                <span aria-current="page" className="font-semibold text-navy">
+                <span aria-current="page" className={`font-semibold ${inverted ? 'text-white' : 'text-navy'}`}>
                   {item.label}
                 </span>
               )}

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Riyadh Home Solution — Electrical (original artwork): light bulb with a lightning bolt, plug, small spotlight. -->
+  <defs>
+    <filter id="sticker" x="-10%" y="-10%" width="125%" height="125%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="7" result="spread"/>
+      <feFlood flood-color="#FFFFFF" result="white"/>
+      <feComposite in="white" in2="spread" operator="in" result="border"/>
+      <feOffset in="spread" dx="8" dy="10" result="off"/>
+      <feGaussianBlur in="off" stdDeviation="2.5" result="blur"/>
+      <feFlood flood-color="#0B2545" flood-opacity="0.2" result="ink"/>
+      <feComposite in="ink" in2="blur" operator="in" result="shadow"/>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="border"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- accents: glow rays + sparkles -->
+  <g stroke="#F28C28" stroke-width="8" stroke-linecap="round">
+    <path d="M178 36 V54"/>
+    <path d="M98 74 L110 87"/>
+    <path d="M62 156 H80"/>
+  </g>
+  <path d="M60 238 Q60 254 76 254 Q60 254 60 270 Q60 254 44 254 Q60 254 60 238 Z" fill="#3BA3D9" stroke="#0B2545" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M356 212 Q356 224 368 224 Q356 224 356 236 Q356 224 344 224 Q356 224 356 212 Z" fill="#F28C28" stroke="#0B2545" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="250" cy="44" r="5" fill="#3BA3D9"/>
+  <circle cx="90" cy="320" r="6" fill="#F28C28"/>
+
+  <!-- spotlight beam (soft, behind everything) -->
+  <path d="M288 118 H332 L364 206 H256 Z" fill="#FFE2BF" opacity="0.8"/>
+
+  <g filter="url(#sticker)" stroke="#0B2545" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- small ceiling spotlight -->
+    <rect x="298" y="62" width="24" height="16" rx="4" fill="#C9D6E3"/>
+    <path d="M280 78 H340 L332 116 H288 Z" fill="#0B2545"/>
+    <path d="M292 87 H306" fill="none" stroke="#3BA3D9" stroke-width="5"/>
+    <ellipse cx="310" cy="117" rx="26" ry="8" fill="#FFF1DF"/>
+
+    <!-- bulb -->
+    <path d="M178 78 A82 82 0 0 1 236 218 Q224 230 222 250 H134 Q132 230 120 218 A82 82 0 0 1 178 78 Z" fill="#FFF1DF"/>
+    <path d="M124 150 A56 56 0 0 1 152 108" fill="none" stroke="#FFFFFF" stroke-width="9"/>
+    <path d="M190 104 L146 172 H176 L162 226 L214 148 H184 Z" fill="#F28C28"/>
+    <rect x="134" y="250" width="88" height="17" rx="7" fill="#C9D6E3"/>
+    <rect x="137" y="267" width="82" height="17" rx="7" fill="#E6ECF3"/>
+    <rect x="140" y="284" width="76" height="15" rx="7" fill="#C9D6E3"/>
+    <path d="M160 299 H196 Q192 318 178 318 Q164 318 160 299 Z" fill="#0B2545"/>
+
+    <!-- plug with its cable -->
+    <path d="M300 338 C318 362 350 356 356 334" fill="none" stroke="#0B2545" stroke-width="10"/>
+    <g transform="translate(292 290) rotate(-34)">
+      <rect x="-20" y="-58" width="11" height="30" rx="4" fill="#E6ECF3"/>
+      <rect x="9" y="-58" width="11" height="30" rx="4" fill="#E6ECF3"/>
+      <rect x="-34" y="-30" width="68" height="62" rx="16" fill="#FFFFFF"/>
+      <rect x="-26" y="-22" width="52" height="14" rx="7" fill="#3BA3D9" stroke="none"/>
+      <rect x="-12" y="32" width="24" height="18" rx="5" fill="#F28C28"/>
+    </g>
+  </g>
+</svg>

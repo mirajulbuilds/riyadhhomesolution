@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Riyadh Home Solution — Cleaning (original artwork): bucket with a mop, spray bottle, sponge. -->
+  <defs>
+    <filter id="sticker" x="-10%" y="-10%" width="125%" height="125%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="7" result="spread"/>
+      <feFlood flood-color="#FFFFFF" result="white"/>
+      <feComposite in="white" in2="spread" operator="in" result="border"/>
+      <feOffset in="spread" dx="8" dy="10" result="off"/>
+      <feGaussianBlur in="off" stdDeviation="2.5" result="blur"/>
+      <feFlood flood-color="#0B2545" flood-opacity="0.2" result="ink"/>
+      <feComposite in="ink" in2="blur" operator="in" result="shadow"/>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="border"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- accents: sparkles + spray mist -->
+  <path d="M330 40 Q330 60 350 60 Q330 60 330 80 Q330 60 310 60 Q330 60 330 40 Z" fill="#F28C28" stroke="#0B2545" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M60 160 Q60 174 74 174 Q60 174 60 188 Q60 174 46 174 Q60 174 60 160 Z" fill="#3BA3D9" stroke="#0B2545" stroke-width="4.5" stroke-linejoin="round"/>
+  <path d="M372 150 Q372 158 380 158 Q372 158 372 166 Q372 158 364 158 Q372 158 372 150 Z" fill="#3BA3D9" stroke="#0B2545" stroke-width="3.5" stroke-linejoin="round"/>
+  <g fill="#3BA3D9">
+    <circle cx="226" cy="128" r="6"/>
+    <circle cx="212" cy="110" r="4.5"/>
+    <circle cx="208" cy="146" r="4.5"/>
+    <circle cx="194" cy="126" r="3.5"/>
+  </g>
+  <circle cx="56" cy="330" r="5" fill="#F28C28"/>
+
+  <g filter="url(#sticker)" stroke="#0B2545" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- spray bottle -->
+    <rect x="290" y="158" width="30" height="28" rx="4" fill="#C9D6E3"/>
+    <path d="M286 140 Q268 146 268 178 Q280 172 290 158" fill="#0B2545"/>
+    <path d="M276 160 V130 Q276 116 290 116 H330 Q344 116 344 130 V160 Z" fill="#F28C28"/>
+    <rect x="244" y="120" width="36" height="18" rx="5" fill="#F28C28"/>
+    <rect x="266" y="184" width="80" height="164" rx="22" fill="#FFFFFF"/>
+    <rect x="266" y="226" width="80" height="62" fill="#3BA3D9" stroke="none"/>
+    <path d="M266 226 H346 M266 288 H346" fill="none" stroke-width="6"/>
+    <path d="M290 260 Q306 246 322 260" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+    <rect x="266" y="184" width="80" height="164" rx="22" fill="none"/>
+
+    <!-- mop handle, dipping into the bucket -->
+    <path d="M178 226 L116 66" fill="none" stroke="#0B2545" stroke-width="26"/>
+    <path d="M178 226 L116 66" fill="none" stroke="#F28C28" stroke-width="11"/>
+    <rect x="98" y="46" width="30" height="26" rx="8" fill="#0B2545" transform="rotate(-21 113 59)"/>
+
+    <!-- bucket -->
+    <path d="M76 226 L98 340 Q100 350 112 350 H228 Q240 350 242 340 L264 226 Z" fill="#3BA3D9"/>
+    <path d="M90 276 H250" fill="none" stroke="#9FD3EE" stroke-width="7"/>
+    <ellipse cx="170" cy="226" rx="94" ry="22" fill="#DDF0FA"/>
+    <!-- soap foam -->
+    <circle cx="116" cy="214" r="20" fill="#FFFFFF"/>
+    <circle cx="150" cy="204" r="25" fill="#FFFFFF"/>
+    <circle cx="188" cy="212" r="19" fill="#FFFFFF"/>
+    <circle cx="216" cy="222" r="12" fill="#FFFFFF"/>
+    <circle cx="142" cy="198" r="6" fill="none" stroke="#BFE3F5" stroke-width="4"/>
+
+    <!-- sponge -->
+    <g transform="translate(222 332) rotate(-8)">
+      <rect x="-50" y="-28" width="100" height="48" rx="12" fill="#F28C28"/>
+      <path d="M-50 -10 V-16 Q-50 -28 -38 -28 H38 Q50 -28 50 -16 V-10 Z" fill="#0B2545"/>
+      <circle cx="-26" cy="4" r="4" fill="#D9761A" stroke="none"/>
+      <circle cx="-4" cy="10" r="3.5" fill="#D9761A" stroke="none"/>
+      <circle cx="18" cy="2" r="4" fill="#D9761A" stroke="none"/>
+      <circle cx="34" cy="10" r="3" fill="#D9761A" stroke="none"/>
+    </g>
+  </g>
+</svg>

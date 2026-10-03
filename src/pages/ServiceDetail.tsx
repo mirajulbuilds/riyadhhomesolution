@@ -21,7 +21,7 @@ export function Component() {
   const t = useStrings()
   if (!data) return <NotFoundView />
   const { category, service, related } = data
-  const message: WhatsAppMessage = { kind: 'service', name: service.name, extraLines: service.waExtraLines }
+  const message: WhatsAppMessage = { kind: 'service', name: service.name, custom: service.waMessage }
   const faq = service.faq.length > 0 ? service.faq : data.faq
 
   const bookingCard = (
@@ -82,7 +82,7 @@ export function Component() {
               {/* No placeholder here: until a photo is uploaded the text comes straight after. */}
               {service.imageUrl && (
                 <div className="mt-6">
-                  <ServiceImage src={service.imageUrl} alt={service.name} icon={category.icon} eager />
+                  <ServiceImage src={service.imageUrl} alt={service.name} category={category} eager />
                 </div>
               )}
               <div className="mt-6 space-y-4 text-base/relaxed text-ink">
@@ -194,7 +194,7 @@ export function Component() {
             <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {related.slice(0, 3).map((s) => (
                 <li key={s.slug}>
-                  <ServiceCard service={s} icon={category.icon} />
+                  <ServiceCard service={s} category={category} />
                 </li>
               ))}
             </ul>

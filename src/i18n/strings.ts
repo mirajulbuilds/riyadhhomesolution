@@ -174,13 +174,19 @@ const ar = {
     allCategoriesLead: 'كل خدمات الصيانة المنزلية التي يقدمها فريقنا في الرياض.', // review-ar
   },
 
+  servicesHub: {
+    gridLabel: 'أقسام الخدمات', // review-ar
+    viewAll: (n: number) => `عرض كل الخدمات (${n})`, // review-ar
+    more: (n: number) => `+${n} أخرى`, // review-ar
+  },
+
   service: {
     options: 'المقاسات والخيارات', // review-ar
     includes: 'ماذا يشمل العمل', // review-ar
     excludes: 'لا يشمل', // review-ar
     parts: 'قطع متوفرة في محلنا', // review-ar
     related: 'خدمات ذات صلة', // review-ar
-    previewNote: 'عند الضغط على زر واتساب تُفتح هذه الرسالة جاهزة. أكمل الحي والوقت ثم أرسلها.', // review-ar
+    previewNote: 'عند الضغط على زر واتساب تُفتح هذه الرسالة جاهزة، ويمكنك تعديلها أو إضافة التفاصيل قبل الإرسال.', // review-ar
     readyTitle: 'اطلب الخدمة الآن', // review-ar
   },
 
@@ -221,6 +227,10 @@ const ar = {
     title: 'شاركنا رأيك', // review-ar
     lead: 'رأيك يساعدنا ويساعد جيرانك على الاختيار. يظهر التقييم في الموقع بعد مراجعته.', // review-ar
     name: 'الاسم', // review-ar
+    phone: 'رقم الجوال', // review-ar
+    phoneHint: 'رقمك لن يظهر للزوار، نستخدمه فقط للتأكد من صحة الرأي.',
+    phoneInvalid: 'أدخل رقم جوال صحيحًا مثل 05XXXXXXXX، أو رقمًا دوليًا مع رمز الدولة.', // review-ar
+    phoneLimited: 'وصلنا تقييم بهذا الرقم خلال آخر 30 يومًا، ويمكنك إرسال تقييم جديد بعدها.', // review-ar
     area: 'الحي', // review-ar
     areaOther: 'حي آخر', // review-ar
     choose: 'اختر', // review-ar
@@ -431,13 +441,19 @@ const en: Strings = {
     allCategoriesLead: 'Every home maintenance service our team offers in Riyadh.',
   },
 
+  servicesHub: {
+    gridLabel: 'Service categories',
+    viewAll: (n: number) => `View all ${n} services`,
+    more: (n: number) => `+${n} more`,
+  },
+
   service: {
     options: 'Sizes and options',
     includes: 'What’s included',
     excludes: 'Not included',
     parts: 'Parts we stock',
     related: 'Related services',
-    previewNote: 'Tapping WhatsApp opens this message ready to send — just add your area and time.',
+    previewNote: 'Tapping WhatsApp opens this message ready to send — you can edit it or add details first.',
     readyTitle: 'Book this service',
   },
 
@@ -478,6 +494,10 @@ const en: Strings = {
     title: 'Share your experience',
     lead: 'Your feedback helps us and your neighbours. Reviews appear on the site after we check them.',
     name: 'Name',
+    phone: 'Mobile number',
+    phoneHint: 'Your number won’t be shown to visitors — we only use it to check the review is genuine.',
+    phoneInvalid: 'Enter a valid mobile number, e.g. 05XXXXXXXX, or an international number with its country code.',
+    phoneLimited: 'We already received a review from this number in the last 30 days. You can send a new one after that.',
     area: 'Area',
     areaOther: 'Another area',
     choose: 'Choose',

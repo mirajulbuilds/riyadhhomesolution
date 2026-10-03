@@ -1,6 +1,6 @@
 import { Home } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { CategoryIcon, categoryTone } from '@/components/CategoryIcon'
+import { CategoryIllustration, categoryTone } from '@/components/CategoryIcon'
 import { CtaButtons } from '@/components/CtaButtons'
 import { Seo } from '@/components/Seo'
 import { useSite, useStrings } from '@/components/site-context'
@@ -28,10 +28,10 @@ export function NotFoundView() {
                 <li key={c.slug}>
                   <Link
                     to={localizePath(`/services/${c.slug}`, site.lang)}
-                    className="flex h-full flex-col items-center gap-2 rounded-2xl border border-line p-4 text-sm font-semibold text-navy hover:border-navy"
+                    className="group flex h-full flex-col items-center gap-2 rounded-2xl border border-line p-4 text-sm font-semibold text-navy transition-[border-color,translate] hover:-translate-y-0.5 hover:border-navy"
                   >
-                    <span className={`grid size-11 place-items-center rounded-xl ${tone.bg}`}>
-                      <CategoryIcon icon={c.icon} className={`size-5 ${tone.fg}`} />
+                    <span className={`grid size-20 place-items-center rounded-full ${tone.bg}`}>
+                      <CategoryIllustration src={c.imageUrl} icon={c.icon} size={80} className="art-bob size-20" />
                     </span>
                     {c.name}
                   </Link>

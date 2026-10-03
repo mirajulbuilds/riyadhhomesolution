@@ -10,8 +10,6 @@ export const cctvServices = defineServices('cctv-intercom-network', [
     short_ar: 'تركيب كاميرات مراقبة داخلية وخارجية جديدة مع جهاز التسجيل، وربطها بجوالك.', // review-ar
     short_en: 'Installing new indoor and outdoor cameras with a recorder, connected to your phone.',
     has_detail_page: true,
-    wa_extra_lines_ar: 'عدد الكاميرات: ', // review-ar
-    wa_extra_lines_en: 'Number of cameras: ',
     body_ar: [
       'نركّب كاميرات مراقبة داخلية وخارجية للبيوت والفلل، بجميع الأنواع حسب اختيارك، مع جهاز التسجيل وتمديد الكابلات بشكل مرتب.', // review-ar
       'نحدد معك أماكن الكاميرات لتغطية المداخل والحوش والمواقف، ونضبط التطبيق على جوالك لتشاهد البث والتسجيلات من أي مكان.', // review-ar

@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react'
 import { Link, useLoaderData } from 'react-router-dom'
 import { AreaChips } from '@/components/AreasMap'
-import { CategoryArt, CategoryIcon } from '@/components/CategoryIcon'
+import { CategoryIcon, CategoryIllustration, categoryTone } from '@/components/CategoryIcon'
 import { CtaButtons } from '@/components/CtaButtons'
 import { CtaBand } from '@/components/HomeBlocks'
 import { DescribeCard, ServiceCard } from '@/components/ServiceCard'
@@ -25,6 +25,7 @@ export function Component() {
   if (!data) return <NotFoundView />
   const { category, services, others } = data
   const lang = site.lang
+  const tone = categoryTone(category.icon)
 
   return (
     <>
@@ -44,9 +45,14 @@ export function Component() {
           <div>
             <h1 className="text-[1.75rem]/tight font-bold sm:text-4xl/tight">{category.headline}</h1>
             <p className="mt-3 max-w-2xl text-base/relaxed text-muted sm:text-lg/relaxed">{category.metaDescription}</p>
-            <CtaButtons message={{ kind: 'service', name: category.name }} location="category_hero" category={category.slug} className="mt-6" />
+            <CtaButtons message={{ kind: 'category', message: category.waMessage }} location="category_hero" category={category.slug} className="mt-6" />
           </div>
-          <CategoryArt icon={category.icon} className="hidden md:grid" />
+          {/* Hidden on phones so WhatsApp + Call stay in the first screen. */}
+          <div aria-hidden="true" className="relative hidden aspect-square place-items-center md:grid">
+            <span className={`absolute inset-[6%] rounded-full ${tone.bg}`} />
+            {/* lazy: a hidden (phone) image is then never downloaded; on desktop it loads right after layout. */}
+            <CategoryIllustration src={category.imageUrl} icon={category.icon} size={280} className="relative size-full" />
+          </div>
           <TrustStrip className="md:col-span-2" />
         </section>
 
@@ -93,11 +99,11 @@ export function Component() {
           <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((s) => (
               <li key={s.slug}>
-                <ServiceCard service={s} icon={category.icon} />
+                <ServiceCard service={s} category={category} />
               </li>
             ))}
             <li>
-              <DescribeCard categoryName={category.name} categorySlug={category.slug} />
+              <DescribeCard categoryMessage={category.waMessage} categorySlug={category.slug} />
             </li>
           </ul>
         </section>

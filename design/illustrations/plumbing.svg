@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Riyadh Home Solution — Plumbing (original artwork): mixer tap with a water drop, pipe wrench, pipe elbow. -->
+  <defs>
+    <filter id="sticker" x="-10%" y="-10%" width="125%" height="125%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="7" result="spread"/>
+      <feFlood flood-color="#FFFFFF" result="white"/>
+      <feComposite in="white" in2="spread" operator="in" result="border"/>
+      <feOffset in="spread" dx="8" dy="10" result="off"/>
+      <feGaussianBlur in="off" stdDeviation="2.5" result="blur"/>
+      <feFlood flood-color="#0B2545" flood-opacity="0.2" result="ink"/>
+      <feComposite in="ink" in2="blur" operator="in" result="shadow"/>
+      <feMerge><feMergeNode in="shadow"/><feMergeNode in="border"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <!-- accents -->
+  <path d="M60 52 Q60 70 78 70 Q60 70 60 88 Q60 70 42 70 Q60 70 60 52 Z" fill="#F28C28" stroke="#0B2545" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M352 196 Q352 208 364 208 Q352 208 352 220 Q352 208 340 208 Q352 208 352 196 Z" fill="#3BA3D9" stroke="#0B2545" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="44" cy="186" r="6" fill="#3BA3D9"/>
+  <circle cx="200" cy="48" r="5" fill="#F28C28"/>
+  <circle cx="60" cy="336" r="4" fill="#0B2545" opacity="0.35"/>
+
+  <g filter="url(#sticker)" stroke="#0B2545" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <!-- pipe wrench, behind the tap: handle end lower-right, jaws upper-left -->
+    <g transform="translate(340 338) rotate(-135) scale(1 -1)">
+      <rect x="0" y="-16" width="232" height="32" rx="16" fill="#F28C28"/>
+      <path d="M16 -16 H58 V16 H16 A16 16 0 0 1 16 -16 Z" fill="#D9761A" stroke="none"/>
+      <rect x="0" y="-16" width="232" height="32" rx="16" fill="none"/>
+      <circle cx="22" cy="0" r="6" fill="#FFFFFF" stroke-width="5"/>
+      <rect x="214" y="-24" width="58" height="48" rx="10" fill="#C9D6E3"/>
+      <path d="M262 -24 V-80 Q262 -88 254 -88 H206 Q198 -88 198 -80 V-66 l7 7 l7 -7 l7 7 l7 -7 l7 7 l7 -7 l7 7 l7 -7 V-24 Z" fill="#E6ECF3"/>
+      <rect x="232" y="-52" width="46" height="24" rx="6" fill="#C9D6E3"/>
+      <path d="M244 -47 V-33 M255 -47 V-33 M266 -47 V-33" fill="none" stroke-width="4"/>
+    </g>
+
+    <!-- spout -->
+    <path d="M206 226 H144 Q126 226 126 244" fill="none" stroke="#0B2545" stroke-width="38" stroke-linecap="butt"/>
+    <path d="M206 226 H144 Q126 226 126 244" fill="none" stroke="#E6ECF3" stroke-width="22" stroke-linecap="butt"/>
+    <path d="M200 221 H148" fill="none" stroke="#FFFFFF" stroke-width="5"/>
+    <rect x="108" y="242" width="36" height="16" rx="5" fill="#C9D6E3"/>
+
+    <!-- body -->
+    <rect x="188" y="188" width="66" height="136" rx="18" fill="#E6ECF3"/>
+    <rect x="202" y="208" width="9" height="98" rx="4.5" fill="#FFFFFF" stroke="none"/>
+    <rect x="232" y="204" width="9" height="106" rx="4.5" fill="#C9D6E3" stroke="none"/>
+
+    <!-- lever + cap with the hot/cold mark -->
+    <path d="M224 184 L286 166" fill="none" stroke="#0B2545" stroke-width="30"/>
+    <path d="M224 184 L286 166" fill="none" stroke="#E6ECF3" stroke-width="14"/>
+    <circle cx="221" cy="186" r="21" fill="#E6ECF3"/>
+    <path d="M212 186 A9 9 0 0 1 230 186 Z" fill="#F28C28" stroke="none"/>
+    <path d="M212 186 A9 9 0 0 0 230 186 Z" fill="#3BA3D9" stroke="none"/>
+
+    <!-- base -->
+    <rect x="164" y="316" width="114" height="26" rx="13" fill="#C9D6E3"/>
+
+    <!-- water drop -->
+    <path d="M126 270 C134 284 143 294 143 303 A17 17 0 0 1 109 303 C109 294 118 284 126 270 Z" fill="#3BA3D9"/>
+    <path d="M118 302 Q118 294 123 289" fill="none" stroke="#FFFFFF" stroke-width="4.5"/>
+
+    <!-- 90° pipe elbow fitting -->
+    <g transform="translate(316 102)">
+      <path d="M-36 -18 H0 Q18 -18 18 0 V36" fill="none" stroke="#0B2545" stroke-width="44" stroke-linecap="butt"/>
+      <path d="M-36 -18 H0 Q18 -18 18 0 V36" fill="none" stroke="#3BA3D9" stroke-width="28" stroke-linecap="butt"/>
+      <path d="M-30 -24 H-2 Q10 -24 12 -12" fill="none" stroke="#BFE3F5" stroke-width="6"/>
+      <rect x="-50" y="-46" width="20" height="56" rx="6" fill="#DDF0FA"/>
+      <rect x="-10" y="30" width="56" height="20" rx="6" fill="#DDF0FA"/>
+    </g>
+  </g>
+</svg>

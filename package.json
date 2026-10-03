@@ -11,7 +11,8 @@
     "build": "vite-react-ssg build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "seed:sql": "tsx scripts/generate-seed-sql.ts"
+    "seed:sql": "tsx scripts/generate-seed-sql.ts",
+    "illustrations": "tsx scripts/export-illustrations.ts"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",
@@ -28,6 +29,7 @@
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^6.1.1",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",

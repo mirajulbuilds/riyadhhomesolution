@@ -6,11 +6,14 @@
  * Phase 4 animates is its own group with a data-part name (lights, drip, tap handle, camera,
  * technician limbs, toolbox), so the story timeline can target them directly.
  *
- * The picture is mirrored in RTL so the technician stands on the reading-start side.
+ * Never mirrored: the scene looks identical in Arabic and English (direction is forced to ltr;
+ * only the hero column it sits in changes side). Same rule for every illustration and photo.
+ * Phase 4: the story animation must also run in the same direction in both languages (the
+ * technician always walks in from the same side), overriding the brief's "reading-start side".
  */
 export function HeroScene({ label }: { label: string }) {
   return (
-    <svg viewBox="0 0 640 480" role="img" aria-label={label} className="block h-auto w-full rtl:-scale-x-100">
+    <svg viewBox="0 0 640 480" role="img" aria-label={label} direction="ltr" style={{ direction: 'ltr' }} className="block h-auto w-full">
       <defs>
         <linearGradient id="hs-cone" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#FFE3A3" stopOpacity="0.85" />

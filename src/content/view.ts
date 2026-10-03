@@ -59,6 +59,7 @@ export function toSite(content: SiteContent, lang: Lang): Site {
   return {
     lang,
     brand: s.brand[lang],
+    alternateBrand: s.brand[lang === 'ar' ? 'en' : 'ar'],
     phoneDisplay: s.phone_display,
     phoneE164: s.phone_e164,
     whatsappNumber: s.whatsapp_number.replace(/\D/g, ''),
@@ -66,7 +67,7 @@ export function toSite(content: SiteContent, lang: Lang): Site {
     addressLine: `${address.street}${sep}${address.district}${sep}${address.city} ${address.postalCode}`,
     plusCode: s.plus_code,
     mapsUrl: s.maps_url,
-    geo: s.geo,
+    geo: { lat: s.shop_lat, lng: s.shop_lng },
     hours: s.hours,
     emergency: s.emergency[lang],
     sinceYear: s.since_year,
@@ -82,7 +83,13 @@ export function toSite(content: SiteContent, lang: Lang): Site {
       .map((name) => ({ name, url: s.social[name]?.trim() ?? '' }))
       .filter((x) => x.url !== ''),
     googlePlaceId: s.google_place_id,
-    nav: content.categories.map((c) => ({ slug: c.slug, name: pick(c, 'name', lang), isPrimary: c.is_primary, icon: c.icon })),
+    nav: content.categories.map((c) => ({
+      slug: c.slug,
+      name: pick(c, 'name', lang),
+      isPrimary: c.is_primary,
+      icon: c.icon,
+      imageUrl: c.image_url,
+    })),
     buildYear: new Date().getFullYear(),
   }
 }
@@ -99,6 +106,7 @@ export function toCategorySummary(row: CategoryRow, lang: Lang): CategorySummary
     icon: row.icon,
     imageUrl: row.image_url,
     isPrimary: row.is_primary,
+    waMessage: pick(row, 'wa_message', lang).trim(),
   }
 }
 
@@ -124,7 +132,7 @@ export function toServiceCard(row: ServiceRow, categorySlug: string, lang: Lang)
     hasDetailPage: row.has_detail_page,
     featured: row.featured,
     partsInStock: row.parts_in_stock,
-    waExtraLines: pick(row, 'wa_extra_lines', lang) || null,
+    waMessage: pick(row, 'wa_message', lang).trim() || null,
   }
 }
 
@@ -217,7 +225,9 @@ export function categoryData(c: SiteContent, lang: Lang, slug: string | undefine
   return {
     category: toCategory(row, lang),
     services: servicesOf(c, row).map((s) => toServiceCard(s, row.slug, lang)),
-    others: c.categories.filter((x) => x.id !== row.id).map((x) => ({ slug: x.slug, name: pick(x, 'name', lang), icon: x.icon })),
+    others: c.categories
+      .filter((x) => x.id !== row.id)
+      .map((x) => ({ slug: x.slug, name: pick(x, 'name', lang), icon: x.icon, imageUrl: x.image_url })),
   }
 }
 

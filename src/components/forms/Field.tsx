@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-/** Label + control + hint/error, wired with aria-describedby. */
+/** Label + control + hint + error, wired with aria-describedby. The hint stays visible with an error. */
 export function Field({
   id,
   label,
@@ -28,7 +28,7 @@ export function Field({
         )}
       </label>
       {children({ id, 'aria-describedby': describedBy, 'aria-invalid': error ? true : undefined, required })}
-      {hint && !error && (
+      {hint && (
         <p id={`${id}-hint`} className="mt-1.5 text-xs text-muted">
           {hint}
         </p>
