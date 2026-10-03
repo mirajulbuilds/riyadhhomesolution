@@ -8,6 +8,13 @@
       "port": 4173
     },
     {
+      "name": "pages",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "wrangler@4", "pages", "dev", "dist", "--port", "8788"],
+      "port": 8788,
+      "autoPort": false
+    },
+    {
       "name": "dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--", "--port", "5173", "--strictPort"],
