@@ -230,7 +230,6 @@ const ar = {
     phone: 'رقم الجوال', // review-ar
     phoneHint: 'رقمك لن يظهر للزوار، نستخدمه فقط للتأكد من صحة الرأي.',
     phoneInvalid: 'أدخل رقم جوال صحيحًا مثل 05XXXXXXXX، أو رقمًا دوليًا مع رمز الدولة.', // review-ar
-    phoneLimited: 'وصلنا تقييم بهذا الرقم خلال آخر 30 يومًا، ويمكنك إرسال تقييم جديد بعدها.', // review-ar
     area: 'الحي', // review-ar
     areaOther: 'حي آخر', // review-ar
     choose: 'اختر', // review-ar
@@ -249,7 +248,6 @@ const ar = {
     tooLong: (max: number) => `الحد الأقصى ${max} حرفًا`, // review-ar
     photoType: 'اختر ملف صورة', // review-ar
     photoTooBig: 'الصورة كبيرة جدًا (الحد 10 ميجابايت)', // review-ar
-    rateLimited: 'أرسلت عدة تقييمات مؤخرًا. حاول مرة أخرى بعد قليل.', // review-ar
     failed: 'تعذّر إرسال التقييم. حاول مرة أخرى أو راسلنا على واتساب.', // review-ar
     unavailable: 'إرسال التقييمات غير متاح حاليًا. راسلنا على واتساب.', // review-ar
   },
@@ -497,7 +495,6 @@ const en: Strings = {
     phone: 'Mobile number',
     phoneHint: 'Your number won’t be shown to visitors — we only use it to check the review is genuine.',
     phoneInvalid: 'Enter a valid mobile number, e.g. 05XXXXXXXX, or an international number with its country code.',
-    phoneLimited: 'We already received a review from this number in the last 30 days. You can send a new one after that.',
     area: 'Area',
     areaOther: 'Another area',
     choose: 'Choose',
@@ -516,7 +513,6 @@ const en: Strings = {
     tooLong: (max: number) => `Maximum ${max} characters`,
     photoType: 'Please choose an image file',
     photoTooBig: 'That photo is too large (10 MB max)',
-    rateLimited: 'You’ve sent several reviews recently. Please try again a little later.',
     failed: 'We couldn’t send your review. Please try again or message us on WhatsApp.',
     unavailable: 'Reviews can’t be sent right now. Please message us on WhatsApp.',
   },

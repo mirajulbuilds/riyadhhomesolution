@@ -111,7 +111,7 @@ export interface GalleryRow {
   is_active: boolean
 }
 
-/** Columns the public may read (admin_note, source and client_hash stay private). */
+/** Columns the public may read (phone, admin_note, source and status stay private). */
 export interface PublicReviewRow {
   id: string
   name: string

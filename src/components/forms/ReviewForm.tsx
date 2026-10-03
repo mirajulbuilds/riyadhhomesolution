@@ -17,8 +17,8 @@ type Errors = Partial<Record<'name' | 'phone' | 'rating' | 'body' | 'photo' | 'f
 
 /**
  * Website review form (brief §6.6): name, phone (required, private), area, service, 1–5 stars,
- * text, optional photo. Spam control: a hidden honeypot field here, plus the database rate
- * limits (per connection, and one review per phone number per 30 days).
+ * text, optional photo. Spam control: a hidden honeypot field; every review stays pending until
+ * the owner approves it. Repeat phone numbers are allowed (a customer can have several jobs).
  */
 export function ReviewForm({ serviceOptions }: { serviceOptions: { category: string; services: string[] }[] }) {
   const site = useSite()
@@ -78,12 +78,7 @@ export function ReviewForm({ serviceOptions }: { serviceOptions: { category: str
       setStatus('done')
     } catch (err) {
       const reason = (err as { reason?: string }).reason
-      if (reason === 'phone_limited') {
-        setErrors({ phone: f.phoneLimited })
-        ;(form.elements.namedItem('phone') as HTMLElement | null)?.focus()
-      } else {
-        setErrors({ form: reason === 'rate_limited' ? f.rateLimited : reason === 'unavailable' ? f.unavailable : f.failed })
-      }
+      setErrors({ form: reason === 'unavailable' ? f.unavailable : f.failed })
       setStatus('idle')
     }
   }

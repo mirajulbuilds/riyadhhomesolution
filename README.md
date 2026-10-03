@@ -55,6 +55,17 @@ npx supabase db push --include-seed                  # apply migrations + seed
 
 The seed only inserts rows that don't exist yet, so it never overwrites edits made in the admin panel.
 
+## Phase 3 (admin panel) — notes
+
+- **Reviews list:** on each pending review show a small badge such as "N other reviews from this
+  number" (count by `reviews.phone`; index `reviews_phone_created_idx`). Repeat numbers are allowed —
+  never block them. Show the phone with tap-to-call and WhatsApp buttons. Phone is optional on
+  reviews the owner adds by hand.
+- **Categories:** edit `wa_message_ar/en` (the WhatsApp text on the category page) and override
+  `image_url` (default `/illustrations/<slug>.png`).
+- **Services:** optional `wa_message_ar/en` override.
+- **Settings:** `shop_lat` / `shop_lng` (map pin, directions, JSON-LD).
+
 ## Cloudflare Pages
 
 Build command `npm run build`, output directory `dist`, Node 20+. Add the `VITE_*` variables

@@ -26,8 +26,8 @@ export const privacyContent: Record<Lang, PrivacySection[]> = {
     {
       title: 'ما البيانات التي نجمعها', // review-ar
       paragraphs: [
-        'نموذج التقييم: الاسم ورقم الجوال والحي والخدمة وعدد النجوم والتعليق، وصورة إن أرفقتها. نحفظها في قاعدة بياناتنا لنراجعها وننشر التقييم بعد موافقتنا. ونحفظ أيضًا رمزًا مشفّرًا لعنوان اتصالك بالإنترنت لمنع الرسائل المزعجة فقط، ولا يمكن استرجاع العنوان الأصلي منه.', // review-ar
-        'رقم الجوال في نموذج التقييم: نطلبه فقط للتأكد من أن التقييم من عميل حقيقي. لا يظهر في الموقع ولا يُنشر أبدًا، ولا يطّلع عليه إلا صاحب المحل، ونحذفه متى طلبت ذلك عبر واتساب. ونقبل تقييمًا واحدًا من الرقم نفسه كل 30 يومًا.', // review-ar
+        'نموذج التقييم: الاسم ورقم الجوال والحي والخدمة وعدد النجوم والتعليق، وصورة إن أرفقتها. نحفظها في قاعدة بياناتنا لنراجعها وننشر التقييم بعد موافقتنا.', // review-ar
+        'رقم الجوال في نموذج التقييم: نطلبه فقط للتأكد من أن التقييم من عميل حقيقي. لا يظهر في الموقع ولا يُنشر أبدًا، ولا يطّلع عليه إلا صاحب المحل، ونحذفه متى طلبت ذلك عبر واتساب.', // review-ar
         'نموذج طلب الزيارة: لا نحفظ بياناته في الموقع إطلاقًا. يفتح واتساب برسالة جاهزة، ولا تصلنا إلا إذا أرسلتها أنت.', // review-ar
         'واتساب والاتصال: نستخدم رقمك ورسائلك فقط للرد عليك وترتيب الخدمة. تخضع المحادثات على واتساب أيضًا لسياسة خصوصية واتساب.', // review-ar
       ],
@@ -69,8 +69,8 @@ export const privacyContent: Record<Lang, PrivacySection[]> = {
     {
       title: 'What we collect',
       paragraphs: [
-        'Review form: your name, mobile number, area, service, star rating and review, and a photo if you add one. We store these in our database so we can check the review and publish it once approved. We also store a scrambled code of your internet connection’s address, used only to block spam — the original address cannot be recovered from it.',
-        'Your mobile number on the review form: we ask for it only to check that a review comes from a real customer. It is never shown on the site or published, only the shop owner can see it, and we delete it whenever you ask on WhatsApp. We accept one review per number every 30 days.',
+        'Review form: your name, mobile number, area, service, star rating and review, and a photo if you add one. We store these in our database so we can check the review and publish it once approved.',
+        'Your mobile number on the review form: we ask for it only to check that a review comes from a real customer. It is never shown on the site or published, only the shop owner can see it, and we delete it whenever you ask on WhatsApp.',
         'Request-a-visit form: nothing is stored on this website. It opens WhatsApp with a ready message, which only reaches us if you send it.',
         'WhatsApp and phone: we use your number and messages only to reply and arrange the job. WhatsApp conversations are also covered by WhatsApp’s own privacy policy.',
       ],

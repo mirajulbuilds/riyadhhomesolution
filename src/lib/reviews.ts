@@ -12,7 +12,7 @@ export interface ReviewInput {
   photo: File | null
 }
 
-export type ReviewSubmitError = 'unavailable' | 'rate_limited' | 'phone_limited' | 'failed'
+export type ReviewSubmitError = 'unavailable' | 'failed'
 
 export class ReviewError extends Error {
   constructor(public reason: ReviewSubmitError) {
@@ -22,11 +22,12 @@ export class ReviewError extends Error {
 
 /**
  * Sends a website review: a row in public.reviews, then the optional photo → private "reviews"
- * bucket (pending/…). The database forces status=pending and source=website, and rate-limits
- * submissions (per connection, overall, and one review per phone number per 30 days).
+ * bucket (pending/…). The database forces status=pending and source=website; nothing is
+ * published before the owner approves it. There is no per-phone or per-connection limit: a
+ * customer may review several jobs, and repeat numbers are shown to the owner instead.
  *
- * The row goes first so a rejected review (e.g. the 30-day limit) never leaves an orphan photo.
- * If only the photo upload fails, the review itself is still saved.
+ * The row goes first so a rejected insert never leaves an orphan photo. If only the photo upload
+ * fails, the review itself is still saved.
  */
 export async function submitReview(input: ReviewInput): Promise<void> {
   if (!isSupabaseConfigured()) throw new ReviewError('unavailable')
@@ -49,11 +50,7 @@ export async function submitReview(input: ReviewInput): Promise<void> {
     // Private bucket: store the object path. The admin copies approved photos into "site".
     photo_url: photo ? `reviews/${photo.path}` : null,
   })
-  if (error) {
-    if (error.hint === 'phone_rate_limited') throw new ReviewError('phone_limited')
-    const rateLimited = error.hint === 'rate_limited' || /too many reviews/i.test(error.message)
-    throw new ReviewError(rateLimited ? 'rate_limited' : 'failed')
-  }
+  if (error) throw new ReviewError('failed')
 
   if (photo) {
     await db.storage.from('reviews').upload(photo.path, photo.blob, { contentType: photo.blob.type, upsert: false })

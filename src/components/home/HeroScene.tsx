@@ -1,3 +1,9 @@
+import { RHS_MARK_BOX, rhsMarkReversed } from '../icons/rhs-mark'
+
+/** Chest logo: 24 viewBox units wide (the old hand-drawn patch was 14), centred on the chest. */
+const CHEST_LOGO_WIDTH = 24
+const chestLogoScale = CHEST_LOGO_WIDTH / RHS_MARK_BOX.width
+
 /**
  * Hero room illustration (brief §8.2), drawn as layered inline SVG.
  *
@@ -134,8 +140,15 @@ export function HeroScene({ label }: { label: string }) {
           <path d="M240 280l10 14 10-14" fill="#13315C" />
           <rect x="218" y="306" width="64" height="5" fill="#F28C28" />
           <rect x="220" y="354" width="60" height="8" fill="#071A33" />
-          <rect x="260" y="318" width="14" height="12" rx="3" fill="#F28C28" />
-          <path d="M263 327v-4l4-3 4 3v4" fill="none" stroke="#0B2545" strokeWidth="1.6" />
+          {/* The real RHS mark (reversed: white R and S, orange house and wrench), its own group for Phase 4. */}
+          <g
+            data-part="chest-logo"
+            transform={`translate(255 316) scale(${chestLogoScale}) translate(${-RHS_MARK_BOX.x} ${-RHS_MARK_BOX.y})`}
+          >
+            {Object.entries(rhsMarkReversed).map(([name, p]) => (
+              <path key={name} data-part={`logo-${name}`} d={p.d} fill={p.fill} fillRule={p.evenOdd ? 'evenodd' : undefined} />
+            ))}
+          </g>
         </g>
         <g data-part="head">
           <rect x="243" y="264" width="14" height="18" rx="5" fill="#B87B59" />
