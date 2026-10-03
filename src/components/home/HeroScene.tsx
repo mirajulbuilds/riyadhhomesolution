@@ -1,29 +1,23 @@
 import { RHS_MARK_BOX, rhsMarkReversed } from '../icons/rhs-mark'
 
-/* Technician torso geometry (viewBox units). The chest print is computed from these. */
+/* Technician torso geometry (viewBox units); the chest logo is centred from these. */
 const TORSO = { x: 218, y: 280, width: 64, height: 90 }
 const STRIPE = { y: 306, height: 5 }
 const HEM = { x: 220, y: 354, width: 60, height: 8 }
 
 /**
- * Chest print: the real RHS mark, 52.8 units wide (2.2× the first 24-unit version), centred on
- * the torso's centre line (x 250, shared with the V-collar and head) and midway between the
- * stripe and the hem (y 332.5). Box: x 223.6–276.4, y 313.6–351.4, clear of the stripe and hem
- * by ~2.6 and of the torso edges by 5.6. The front arm's inner edge stays ≥ 11 units from the
- * S in this pose.
- * Phase 4: the logo sits inside the torso group, so it tilts with the torso; arm poses (walk
- * cycle, reaching up) must keep arm-front from crossing that box.
+ * Chest logo: 24 viewBox units wide (the old hand-drawn patch was 14), centred on the torso's
+ * centre line (shared with the V-collar and head) and midway between the stripe and the hem.
  */
-const CHEST_LOGO_WIDTH = 52.8
-const chestLogo = (() => {
+const CHEST_LOGO_WIDTH = 24
+const chestLogoTransform = (() => {
   const scale = CHEST_LOGO_WIDTH / RHS_MARK_BOX.width
-  const height = RHS_MARK_BOX.height * scale
   const centreX = TORSO.x + TORSO.width / 2
   const centreY = (STRIPE.y + STRIPE.height + HEM.y) / 2
   const fixed = (n: number, digits: number) => Number(n.toFixed(digits))
   const x = fixed(centreX - CHEST_LOGO_WIDTH / 2, 3)
-  const y = fixed(centreY - height / 2, 3)
-  return { transform: `translate(${x} ${y}) scale(${fixed(scale, 6)}) translate(${-RHS_MARK_BOX.x} ${-RHS_MARK_BOX.y})` }
+  const y = fixed(centreY - (RHS_MARK_BOX.height * scale) / 2, 3)
+  return `translate(${x} ${y}) scale(${fixed(scale, 6)}) translate(${-RHS_MARK_BOX.x} ${-RHS_MARK_BOX.y})`
 })()
 
 /**
@@ -162,8 +156,8 @@ export function HeroScene({ label }: { label: string }) {
           <path d="M240 280l10 14 10-14" fill="#13315C" />
           <rect x={TORSO.x} y={STRIPE.y} width={TORSO.width} height={STRIPE.height} fill="#F28C28" />
           <rect x={HEM.x} y={HEM.y} width={HEM.width} height={HEM.height} fill="#071A33" />
-          {/* Chest print: the real RHS mark (reversed: white R and S, orange house and wrench), its own group for Phase 4. */}
-          <g data-part="chest-logo" transform={chestLogo.transform}>
+          {/* The real RHS mark (reversed: white R and S, orange house and wrench), its own group for Phase 4. */}
+          <g data-part="chest-logo" transform={chestLogoTransform}>
             {Object.entries(rhsMarkReversed).map(([name, p]) => (
               <path key={name} data-part={`logo-${name}`} d={p.d} fill={p.fill} fillRule={p.evenOdd ? 'evenodd' : undefined} />
             ))}
