@@ -4,13 +4,14 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { localizePath, otherLang, switchLangPath } from '@/i18n/lang'
 import { CallLink, WhatsAppLink } from '../ContactLinks'
 import { BrandIcon } from '../icons/BrandIcon'
-import { useSite, useStrings } from '../site-context'
+import { useContextualCta, useSite, useStrings } from '../site-context'
 import { Logo } from './Logo'
 import { HEADER_NAV } from './nav'
 
 export function Header() {
   const { lang, phoneDisplay } = useSite()
   const t = useStrings()
+  const cta = useContextualCta()
   const { pathname } = useLocation()
 
   return (
@@ -56,7 +57,13 @@ export function Header() {
             <span dir="ltr">{phoneDisplay}</span>
           </CallLink>
 
-          <WhatsAppLink message={{ kind: 'general' }} location="header" className="btn btn-wa btn-sm pulse-ring hidden md:inline-flex">
+          <WhatsAppLink
+            message={cta.message}
+            location="header"
+            category={cta.category}
+            service={cta.service}
+            className="btn btn-wa btn-sm pulse-ring hidden md:inline-flex"
+          >
             <BrandIcon name="whatsapp" size={18} />
             {t.cta.whatsapp}
           </WhatsAppLink>

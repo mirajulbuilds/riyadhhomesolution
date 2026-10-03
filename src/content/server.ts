@@ -32,6 +32,7 @@ async function loadContent(): Promise<SiteContent> {
   const url = import.meta.env.VITE_SUPABASE_URL
   const key = import.meta.env.VITE_SUPABASE_ANON_KEY
   if (!url || !key) {
+    if (import.meta.env.VITE_DEMO_CONTENT === 'true') return contentWithDemo()
     console.warn('[content] Supabase keys not set — building from seed data (src/content/seed).')
     return contentFromSeed()
   }
@@ -64,6 +65,13 @@ export function contentFromSeed(): SiteContent {
     reviews: [],
     googleReviews: null,
   }
+}
+
+/** Seed + sample gallery/reviews, for checking those layouts locally (VITE_DEMO_CONTENT=true). */
+async function contentWithDemo(): Promise<SiteContent> {
+  const { demoGallery, demoGoogle, demoReviews } = await import('./seed/demo')
+  console.warn('[content] DEMO content enabled — sample gallery photos and reviews. Never use for a real build.')
+  return { ...contentFromSeed(), gallery: demoGallery, reviews: demoReviews, googleReviews: demoGoogle }
 }
 
 const bySortOrder = (a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order

@@ -150,6 +150,15 @@ export interface ServiceArea {
   key: string
   ar: string
   en: string
+  /** Approximate district centre, used to place the pin on the areas map. Optional. */
+  lat?: number
+  lng?: number
+}
+
+/** Photos the owner uploads from the admin panel; empty until then. */
+export interface SiteImages {
+  about_shop: string
+  about_team: string
 }
 
 export interface SettingsValues {
@@ -183,6 +192,7 @@ export interface SettingsValues {
   story: { ar: string[]; en: string[] }
   google_place_id: string
   home_faq: FaqRow[]
+  site_images: SiteImages
 }
 
 export type SettingsKey = keyof SettingsValues
@@ -225,12 +235,13 @@ export interface Site {
   sinceYear: number
   yearsInBuilding: number
   technicians: number
-  areas: { key: string; name: string }[]
+  areas: { key: string; name: string; lat?: number; lng?: number }[]
   areasNote: string
+  images: { aboutShop: string | null; aboutTeam: string | null }
   social: { name: 'facebook' | 'instagram' | 'tiktok' | 'snapchat'; url: string }[]
   googlePlaceId: string
   /** Category links for the header menu and footer. */
-  nav: { slug: string; name: string; isPrimary: boolean }[]
+  nav: { slug: string; name: string; isPrimary: boolean; icon: string | null }[]
   buildYear: number
 }
 

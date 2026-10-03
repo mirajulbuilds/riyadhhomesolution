@@ -1,5 +1,32 @@
 @import 'tailwindcss';
 
+/*
+ * IBM Plex Sans Arabic (OFL-1.1 — see assets/fonts/OFL-IBM-Plex-Sans-Arabic.txt; files taken from
+ * @fontsource/ibm-plex-sans-arabic 5.3.0), Arabic subset, two weights.
+ * font-display: optional + <link rel="preload"> on Arabic pages (SiteLayout): if the font isn't
+ * ready within ~100 ms the first page view keeps the system Arabic font instead of swapping
+ * mid-read — swapping re-wraps long Arabic text and caused visible layout shift. Every later
+ * page uses Plex from cache. Weight 600 (semibold) renders with the 700 file.
+ */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url('../assets/fonts/plex-arabic-400.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011,
+    U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: optional;
+  src: url('../assets/fonts/plex-arabic-700.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011,
+    U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
 /* Brand tokens (PROJECT_BRIEF.md §5). Change colours here only. */
 :root {
   --navy: #0b2545; /* primary, headings, hero background */
@@ -15,9 +42,8 @@
   --muted: #4b5563;
   --wa: #0f7a4b; /* WhatsApp buttons, white text */
 
-  /* Plex is loaded with its Arabic subset only, so digits/Latin fall through to Manrope.
-     Weights in use: 400 body, 600 UI (buttons, nav, labels), 700 headings. Every extra Arabic
-     weight is ~45 KB on mobile, so avoid font-medium (500) above the fold. */
+  /* Plex covers Arabic script only, so digits/Latin fall through to Manrope. Arabic weights
+     available: 400 (body) and 700 (headings, and UI text styled 600). */
   --font-arabic: 'IBM Plex Sans Arabic', 'Manrope Variable', 'Segoe UI', Tahoma, system-ui, sans-serif;
   --font-latin: 'Manrope Variable', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
 }
@@ -205,6 +231,13 @@
   }
 }
 
+@keyframes lb-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
 @keyframes pulse-ring {
   0% {
     transform: scale(1);
@@ -228,5 +261,16 @@
   }
   .pulse-ring::after {
     display: none;
+  }
+}
+
+/* Areas map labels: bigger on phones, where the 600-unit-wide map is drawn ~350px wide.
+   (CSS px inside an SVG are viewBox units.) */
+.map-label {
+  font-size: 15px;
+}
+@media (max-width: 639px) {
+  .map-label {
+    font-size: 23px;
   }
 }

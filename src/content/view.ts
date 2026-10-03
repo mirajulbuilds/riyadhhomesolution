@@ -72,13 +72,17 @@ export function toSite(content: SiteContent, lang: Lang): Site {
     sinceYear: s.since_year,
     yearsInBuilding: s.years_in_building,
     technicians: s.technicians,
-    areas: s.service_areas.map((a) => ({ key: a.key, name: a[lang] })),
+    areas: s.service_areas.map((a) => ({ key: a.key, name: a[lang], lat: a.lat, lng: a.lng })),
     areasNote: s.service_areas_note[lang],
+    images: {
+      aboutShop: s.site_images?.about_shop?.trim() || null,
+      aboutTeam: s.site_images?.about_team?.trim() || null,
+    },
     social: (['facebook', 'instagram', 'tiktok', 'snapchat'] as const)
       .map((name) => ({ name, url: s.social[name]?.trim() ?? '' }))
       .filter((x) => x.url !== ''),
     googlePlaceId: s.google_place_id,
-    nav: content.categories.map((c) => ({ slug: c.slug, name: pick(c, 'name', lang), isPrimary: c.is_primary })),
+    nav: content.categories.map((c) => ({ slug: c.slug, name: pick(c, 'name', lang), isPrimary: c.is_primary, icon: c.icon })),
     buildYear: new Date().getFullYear(),
   }
 }
@@ -193,7 +197,7 @@ function toGoogleSummary(content: SiteContent): GoogleSummary | null {
 export const layoutData = (c: SiteContent, lang: Lang) => ({ site: toSite(c, lang) })
 
 export const homeData = (c: SiteContent, lang: Lang) => ({
-  categories: c.categories.map((row) => toCategorySummary(row, lang)),
+  categories: c.categories.map((row) => ({ ...toCategorySummary(row, lang), serviceCount: servicesOf(c, row).length })),
   faq: faqs(c.settings.home_faq, lang),
   gallery: toGalleryItems(c, lang).slice(0, 6),
   reviews: toReviews(c, lang).slice(0, 12),
@@ -213,6 +217,7 @@ export function categoryData(c: SiteContent, lang: Lang, slug: string | undefine
   return {
     category: toCategory(row, lang),
     services: servicesOf(c, row).map((s) => toServiceCard(s, row.slug, lang)),
+    others: c.categories.filter((x) => x.id !== row.id).map((x) => ({ slug: x.slug, name: pick(x, 'name', lang), icon: x.icon })),
   }
 }
 
@@ -225,6 +230,7 @@ export function serviceData(c: SiteContent, lang: Lang, categorySlug: string | u
   const related = siblings.filter((s) => s.id !== row.id)
   return {
     category: toCategorySummary(category, lang),
+    faq: faqs(category.faq, lang),
     service: toServiceDetail(row, category.slug, lang),
     // Other detail pages first, then the rest, so "related" links lead somewhere useful.
     related: [...related.filter((s) => s.has_detail_page), ...related.filter((s) => !s.has_detail_page)]

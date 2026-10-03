@@ -1,5 +1,7 @@
 import { Outlet, ScrollRestoration, useLoaderData } from 'react-router-dom'
 import { Head } from 'vite-react-ssg'
+import plexArabic400 from '@/assets/fonts/plex-arabic-400.woff2?url'
+import plexArabic700 from '@/assets/fonts/plex-arabic-700.woff2?url'
 import type { LayoutData } from '@/content/view'
 import { dirOf, type Lang } from '@/i18n/lang'
 import { strings } from '@/i18n/strings'
@@ -17,6 +19,9 @@ export function SiteLayout({ lang }: { lang: Lang }) {
     <SiteProvider site={site}>
       <Head>
         <html lang={lang} dir={dirOf(lang)} />
+        {/* Arabic pages: start the two Plex weights with the HTML (font-display: optional). */}
+        {lang === 'ar' && <link rel="preload" href={plexArabic400} as="font" type="font/woff2" crossOrigin="" />}
+        {lang === 'ar' && <link rel="preload" href={plexArabic700} as="font" type="font/woff2" crossOrigin="" />}
       </Head>
       <a href="#main" className="skip-link">
         {t.skipToContent}

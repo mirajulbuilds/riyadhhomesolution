@@ -1,10 +1,6 @@
-// Self-hosted fonts. IBM Plex Sans Arabic is loaded for Arabic script only; digits and Latin text
-// on Arabic pages use Manrope (one variable file, shared with the English pages) to keep the
-// font download small on mobile.
-import '@fontsource/ibm-plex-sans-arabic/arabic-400.css'
-import '@fontsource/ibm-plex-sans-arabic/arabic-500.css'
-import '@fontsource/ibm-plex-sans-arabic/arabic-600.css'
-import '@fontsource/ibm-plex-sans-arabic/arabic-700.css'
+// Self-hosted fonts. IBM Plex Sans Arabic (Arabic script only) is declared in styles/index.css;
+// digits and Latin text on Arabic pages use Manrope — one variable file shared with the
+// English pages — to keep the font download small on mobile.
 import '@fontsource-variable/manrope/wght.css'
 import './styles/index.css'
 

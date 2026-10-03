@@ -104,6 +104,182 @@ const ar = {
   },
   details: 'التفاصيل',
   messagePreview: 'الرسالة التي ستصلنا', // review-ar
+
+  common: {
+    seeAll: 'عرض الكل', // review-ar
+    askOnWhatsapp: 'اسأل على واتساب', // review-ar
+    ownTechnicians: 'فنيون من فريقنا',
+    partsInStock: 'القطع متوفرة في محلنا',
+    servicesCount: (n: number) => (n === 1 ? 'خدمة واحدة' : n === 2 ? 'خدمتان' : n <= 10 ? `${n} خدمات` : `${n} خدمة`), // review-ar
+    shop: 'محلنا', // review-ar
+    close: 'إغلاق', // review-ar
+    previous: 'السابق', // review-ar
+    next: 'التالي', // review-ar
+    faqTitle: 'أسئلة شائعة', // review-ar
+    areasNoteIntro: 'نخدم', // review-ar
+    mapApprox: 'المواقع تقريبية', // review-ar
+    north: 'ش', // review-ar
+  },
+
+  home: {
+    servicesTitle: 'خدماتنا', // review-ar
+    servicesLead: 'اختر الخدمة وراسلنا على واتساب، ونؤكد لك السعر والموعد قبل أن يبدأ الفني.', // review-ar
+    allServices: 'كل الخدمات', // review-ar
+    whyTitle: 'لماذا رياض هوم سوليوشن؟', // review-ar
+    workTitle: 'من أعمالنا', // review-ar
+    workLead: 'صور حقيقية من بيوت عملائنا في الرياض.', // review-ar
+    allWork: 'كل الأعمال', // review-ar
+    reviewsTitle: 'آراء عملائنا', // review-ar
+    areasTitle: 'الأحياء التي نخدمها', // review-ar
+    areasLead: 'فريقنا ينطلق من محلنا في غرناطة إلى الأحياء القريبة.', // review-ar
+    ctaTitle: 'تحتاج فنيًا؟ نحن جاهزون', // review-ar
+    ctaBody: 'راسلنا على واتساب ونرد عليك بالسعر والموعد، أو اتصل بنا مباشرة.', // review-ar
+    sceneLabel: 'رسم توضيحي لغرفة فيها إضاءة سقف ومغسلة وكاميرا مراقبة، وفني من فريقنا مع صندوق العدة', // review-ar
+  },
+
+  why: [
+    {
+      title: 'فنيون من فريقنا',
+      body: 'أكثر من 10 فنيين يعملون معنا يوميًا، وليسوا عمالة من جهات خارجية.', // review-ar
+    },
+    {
+      title: 'القطع متوفرة في محلنا',
+      body: 'يحضر الفني القطعة من محلنا في غرناطة، فينتهي العمل غالبًا في زيارة واحدة.', // review-ar
+    },
+    {
+      title: 'منذ 1999',
+      body: 'أكثر من 20 عامًا في نفس المبنى بحي غرناطة، فتعرف دائمًا أين تجدنا.', // review-ar
+    },
+    {
+      title: 'طوارئ على مدار الساعة',
+      body: 'تسريب أو انقطاع كهرباء؟ اتصل بنا في أي وقت ونرسل فنيًا في أقرب وقت.', // review-ar
+    },
+  ],
+
+  steps: {
+    title: 'كيف نعمل', // review-ar
+    items: [
+      { title: 'راسلنا على واتساب', body: 'أرسل الخدمة التي تحتاجها، ومعها صورة إن أمكن.' }, // review-ar
+      { title: 'نؤكد السعر والموعد', body: 'تعرف السعر قبل أن يبدأ أي عمل.' }, // review-ar
+      { title: 'يصل الفني ومعه القطع', body: 'القطع من محلنا، فلا انتظار ولا زيارة ثانية غالبًا.' }, // review-ar
+      { title: 'ننهي العمل ونجرّبه', body: 'نجرّب كل شيء أمامك قبل أن نغادر.' }, // review-ar
+    ],
+  },
+
+  category: {
+    servicesIn: (name: string) => `خدمات ${name}`, // review-ar
+    about: 'عن الخدمة', // review-ar
+    covers: 'ماذا تشمل', // review-ar
+    other: 'خدمات أخرى', // review-ar
+    allCategoriesLead: 'كل خدمات الصيانة المنزلية التي يقدمها فريقنا في الرياض.', // review-ar
+  },
+
+  service: {
+    options: 'المقاسات والخيارات', // review-ar
+    includes: 'ماذا يشمل العمل', // review-ar
+    excludes: 'لا يشمل', // review-ar
+    parts: 'قطع متوفرة في محلنا', // review-ar
+    related: 'خدمات ذات صلة', // review-ar
+    previewNote: 'عند الضغط على زر واتساب تُفتح هذه الرسالة جاهزة. أكمل الحي والوقت ثم أرسلها.', // review-ar
+    readyTitle: 'اطلب الخدمة الآن', // review-ar
+  },
+
+  products: {
+    lead: 'أدوات صحية وكهربائية وإنارة وكاميرات ومواد بناء متوفرة في محلنا بحي غرناطة.', // review-ar
+    noPrices: 'لا نعرض الأسعار في الموقع. اسألنا على واتساب ونرد عليك بالسعر والتوفر.', // review-ar
+    askCategory: (name: string) => `اسأل عن ${name}`, // review-ar
+    emptyCategory: 'نضيف منتجات هذا القسم قريبًا. اسألنا عن أي قطعة تحتاجها.', // review-ar
+    sections: 'الأقسام', // review-ar
+  },
+
+  work: {
+    lead: 'صور من أعمال فنيينا في بيوت الرياض.', // review-ar
+    filterLabel: 'تصفية حسب الخدمة', // review-ar
+    all: 'الكل',
+    before: 'قبل',
+    after: 'بعد',
+    compare: 'اسحب للمقارنة بين قبل وبعد', // review-ar
+    empty: 'نضيف صور أعمالنا قريبًا. تابعنا أو راسلنا على واتساب لتطلب صورًا لأعمال مشابهة.', // review-ar
+    emptyFilter: 'لا توجد صور لهذه الخدمة بعد.', // review-ar
+    open: 'عرض الصورة', // review-ar
+  },
+
+  reviews: {
+    lead: 'تقييمات عملائنا على Google وفي موقعنا.', // review-ar
+    googleRating: 'تقييمنا على Google', // review-ar
+    basedOn: (n: number) => `من ${n} تقييم`, // review-ar
+    fromGoogle: 'تقييمات من Google', // review-ar
+    seeOnGoogle: 'كل التقييمات على Google', // review-ar
+    writeOnGoogle: 'اكتب تقييمك على Google', // review-ar
+    siteReviews: 'تقييمات من موقعنا', // review-ar
+    none: 'لا توجد تقييمات منشورة بعد. كن أول من يشاركنا رأيه.', // review-ar
+    stars: (n: number) => `${n} من 5 نجوم`, // review-ar
+    service: 'الخدمة', // review-ar
+  },
+
+  reviewForm: {
+    title: 'شاركنا رأيك', // review-ar
+    lead: 'رأيك يساعدنا ويساعد جيرانك على الاختيار. يظهر التقييم في الموقع بعد مراجعته.', // review-ar
+    name: 'الاسم', // review-ar
+    area: 'الحي', // review-ar
+    areaOther: 'حي آخر', // review-ar
+    choose: 'اختر', // review-ar
+    service: 'الخدمة التي حصلت عليها', // review-ar
+    rating: 'تقييمك', // review-ar
+    body: 'تعليقك', // review-ar
+    photo: 'صورة للعمل (اختياري)', // review-ar
+    photoHint: 'صورة واحدة، وسنصغّر حجمها تلقائيًا قبل الإرسال.', // review-ar
+    consent: 'بإرسال التقييم توافق على نشر اسمك وحيّك وتعليقك في الموقع بعد المراجعة.', // review-ar
+    submit: 'إرسال التقييم', // review-ar
+    sending: 'جارٍ الإرسال…', // review-ar
+    thanks: 'شكرًا لك! سيظهر تقييمك بعد مراجعته.', // review-ar
+    another: 'إرسال تقييم آخر', // review-ar
+    required: 'هذا الحقل مطلوب', // review-ar
+    ratingRequired: 'اختر عدد النجوم', // review-ar
+    tooLong: (max: number) => `الحد الأقصى ${max} حرفًا`, // review-ar
+    photoType: 'اختر ملف صورة', // review-ar
+    photoTooBig: 'الصورة كبيرة جدًا (الحد 10 ميجابايت)', // review-ar
+    rateLimited: 'أرسلت عدة تقييمات مؤخرًا. حاول مرة أخرى بعد قليل.', // review-ar
+    failed: 'تعذّر إرسال التقييم. حاول مرة أخرى أو راسلنا على واتساب.', // review-ar
+    unavailable: 'إرسال التقييمات غير متاح حاليًا. راسلنا على واتساب.', // review-ar
+  },
+
+  about: {
+    lead: 'محل أدوات صحية وكهربائية، وفريق من الفنيين، في نفس المبنى بحي غرناطة منذ أكثر من 20 عامًا.', // review-ar
+    storyTitle: 'قصتنا', // review-ar
+    stats: {
+      since: 'سنة التأسيس', // review-ar
+      years: 'عامًا في نفس المبنى', // review-ar
+      technicians: 'فنيًا في فريقنا', // review-ar
+      areas: 'أحياء نخدمها', // review-ar
+    },
+    shopTitle: 'محلنا في غرناطة', // review-ar
+    shopBody: 'أدوات صحية وكهربائية وإنارة ومواد بناء، ومنه يأخذ الفني القطعة التي يحتاجها بيتك.', // review-ar
+    teamTitle: 'فريقنا', // review-ar
+    teamBody: 'أكثر من 10 فنيين في السباكة والكهرباء والكاميرات يعملون معنا يوميًا.', // review-ar
+    whereTitle: 'أين نحن', // review-ar
+    plusCode: 'الرمز الموقعي', // review-ar
+    mapTitle: 'موقع رياض هوم سوليوشن على خرائط Google', // review-ar
+    showMap: 'عرض الخريطة', // review-ar
+  },
+
+  contact: {
+    whatsappBody: 'الأسرع: أرسل الخدمة وصورة إن أمكن، ونرد عليك بالسعر والموعد.', // review-ar
+    callTitle: 'اتصل بنا', // review-ar
+    callBody: 'للطوارئ والاستفسارات على مدار الساعة.', // review-ar
+    visitTitle: 'زر المحل', // review-ar
+    formTitle: 'اطلب زيارة فني', // review-ar
+    formLead: 'املأ البيانات، وسيفتح واتساب برسالة جاهزة ترسلها لنا.', // review-ar
+    name: 'الاسم', // review-ar
+    district: 'الحي', // review-ar
+    service: 'الخدمة', // review-ar
+    description: 'وصف المشكلة', // review-ar
+    descriptionHint: 'مثال: تسريب تحت مغسلة المطبخ منذ يومين', // review-ar
+    submit: 'متابعة على واتساب', // review-ar
+    note: 'لا نحفظ هذه البيانات في الموقع، فهي تصلنا فقط عبر واتساب.', // review-ar
+    otherService: 'خدمة أخرى', // review-ar
+    hoursTitle: 'ساعات العمل', // review-ar
+  },
 }
 
 type Strings = typeof ar
@@ -197,6 +373,170 @@ const en: Strings = {
   },
   details: 'Details',
   messagePreview: 'The message we’ll receive',
+
+  common: {
+    seeAll: 'See all',
+    askOnWhatsapp: 'Ask on WhatsApp',
+    ownTechnicians: 'Our own technicians',
+    partsInStock: 'Parts in stock at our shop',
+    servicesCount: (n: number) => (n === 1 ? '1 service' : `${n} services`),
+    shop: 'Our shop',
+    close: 'Close',
+    previous: 'Previous',
+    next: 'Next',
+    faqTitle: 'Frequently asked questions',
+    areasNoteIntro: 'We cover',
+    mapApprox: 'Locations are approximate',
+    north: 'N',
+  },
+
+  home: {
+    servicesTitle: 'Our services',
+    servicesLead: 'Pick a service and message us on WhatsApp — we confirm the price and time before the technician starts.',
+    allServices: 'All services',
+    whyTitle: 'Why Riyadh Home Solution?',
+    workTitle: 'Our work',
+    workLead: 'Real photos from our customers’ homes in Riyadh.',
+    allWork: 'See all our work',
+    reviewsTitle: 'What our customers say',
+    areasTitle: 'Areas we cover',
+    areasLead: 'Our team heads out from our shop in Ghirnatah to the districts around it.',
+    ctaTitle: 'Need a technician? We’re ready',
+    ctaBody: 'Message us on WhatsApp and we’ll reply with the price and time — or call us directly.',
+    sceneLabel: 'Illustration of a room with ceiling spotlights, a basin and a security camera, and one of our technicians with a toolbox',
+  },
+
+  why: [
+    { title: 'Our own technicians', body: 'More than 10 technicians who work with us every day — not outsourced workers.' },
+    { title: 'Parts in stock at our shop', body: 'The technician brings the part from our Ghirnatah shop, so the job is usually done in one visit.' },
+    { title: 'Since 1999', body: 'Over 20 years in the same building in Ghirnatah — you always know where to find us.' },
+    { title: 'Emergency service 24/7', body: 'A leak or a power cut? Call us any time and we send a technician as soon as possible.' },
+  ],
+
+  steps: {
+    title: 'How we work',
+    items: [
+      { title: 'Message us on WhatsApp', body: 'Tell us what you need, with a photo if you can.' },
+      { title: 'We confirm price and time', body: 'You know the price before any work starts.' },
+      { title: 'The technician arrives with the parts', body: 'Parts come from our shop — no waiting, usually no second visit.' },
+      { title: 'We finish and test', body: 'We test everything with you before we leave.' },
+    ],
+  },
+
+  category: {
+    servicesIn: (name: string) => `${name} services`,
+    about: 'About the service',
+    covers: 'What it covers',
+    other: 'Other services',
+    allCategoriesLead: 'Every home maintenance service our team offers in Riyadh.',
+  },
+
+  service: {
+    options: 'Sizes and options',
+    includes: 'What’s included',
+    excludes: 'Not included',
+    parts: 'Parts we stock',
+    related: 'Related services',
+    previewNote: 'Tapping WhatsApp opens this message ready to send — just add your area and time.',
+    readyTitle: 'Book this service',
+  },
+
+  products: {
+    lead: 'Sanitary ware, electrical supplies, lighting, cameras and building materials in stock at our Ghirnatah shop.',
+    noPrices: 'We don’t list prices on the site — ask on WhatsApp and we’ll reply with price and availability.',
+    askCategory: (name: string) => `Ask about ${name.toLowerCase()}`,
+    emptyCategory: 'Items for this section are being added. Ask us about any part you need.',
+    sections: 'Sections',
+  },
+
+  work: {
+    lead: 'Photos of our technicians’ work in Riyadh homes.',
+    filterLabel: 'Filter by service',
+    all: 'All',
+    before: 'Before',
+    after: 'After',
+    compare: 'Drag to compare before and after',
+    empty: 'Photos of our work are coming soon. Message us on WhatsApp to see examples of similar jobs.',
+    emptyFilter: 'No photos for this service yet.',
+    open: 'View photo',
+  },
+
+  reviews: {
+    lead: 'What our customers say on Google and on our website.',
+    googleRating: 'Our Google rating',
+    basedOn: (n: number) => `from ${n} reviews`,
+    fromGoogle: 'Reviews from Google',
+    seeOnGoogle: 'See all reviews on Google',
+    writeOnGoogle: 'Write a review on Google',
+    siteReviews: 'Reviews from our website',
+    none: 'No published reviews yet — be the first to share yours.',
+    stars: (n: number) => `${n} out of 5 stars`,
+    service: 'Service',
+  },
+
+  reviewForm: {
+    title: 'Share your experience',
+    lead: 'Your feedback helps us and your neighbours. Reviews appear on the site after we check them.',
+    name: 'Name',
+    area: 'Area',
+    areaOther: 'Another area',
+    choose: 'Choose',
+    service: 'Service you had',
+    rating: 'Your rating',
+    body: 'Your review',
+    photo: 'Photo of the work (optional)',
+    photoHint: 'One photo — we shrink it automatically before sending.',
+    consent: 'By sending, you agree we may publish your name, area and review on this site after checking it.',
+    submit: 'Send review',
+    sending: 'Sending…',
+    thanks: 'Thanks — your review will appear after approval.',
+    another: 'Send another review',
+    required: 'This field is required',
+    ratingRequired: 'Please choose a star rating',
+    tooLong: (max: number) => `Maximum ${max} characters`,
+    photoType: 'Please choose an image file',
+    photoTooBig: 'That photo is too large (10 MB max)',
+    rateLimited: 'You’ve sent several reviews recently. Please try again a little later.',
+    failed: 'We couldn’t send your review. Please try again or message us on WhatsApp.',
+    unavailable: 'Reviews can’t be sent right now. Please message us on WhatsApp.',
+  },
+
+  about: {
+    lead: 'A plumbing and electrical supplies shop and a team of technicians — in the same Ghirnatah building for over 20 years.',
+    storyTitle: 'Our story',
+    stats: {
+      since: 'Founded',
+      years: 'years in the same building',
+      technicians: 'technicians on our team',
+      areas: 'districts covered',
+    },
+    shopTitle: 'Our shop in Ghirnatah',
+    shopBody: 'Plumbing, electrical, lighting and building supplies — where our technicians pick up the parts your home needs.',
+    teamTitle: 'Our team',
+    teamBody: 'More than 10 technicians in plumbing, electrical and CCTV who work with us every day.',
+    whereTitle: 'Where we are',
+    plusCode: 'Plus Code',
+    mapTitle: 'Riyadh Home Solution on Google Maps',
+    showMap: 'Show map',
+  },
+
+  contact: {
+    whatsappBody: 'Fastest: send the service and a photo if you can — we reply with the price and time.',
+    callTitle: 'Call us',
+    callBody: 'For emergencies and questions, around the clock.',
+    visitTitle: 'Visit the shop',
+    formTitle: 'Request a visit',
+    formLead: 'Fill this in and WhatsApp opens with a ready-to-send message.',
+    name: 'Name',
+    district: 'Area',
+    service: 'Service',
+    description: 'Describe the problem',
+    descriptionHint: 'e.g. leak under the kitchen sink for two days',
+    submit: 'Continue on WhatsApp',
+    note: 'We don’t store this form — it only reaches us through WhatsApp.',
+    otherService: 'Something else',
+    hoursTitle: 'Opening hours',
+  },
 }
 
 export const strings: Record<Lang, Strings> = { ar, en }

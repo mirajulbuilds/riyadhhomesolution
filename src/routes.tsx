@@ -3,6 +3,7 @@ import type { RouteRecord } from 'vite-react-ssg'
 import type { RouteHandle } from '@/components/site-context'
 import { SiteLayout } from '@/components/layout/SiteLayout'
 import type { SiteContent } from '@/content/types'
+import type { CategoryData, ServiceData } from '@/content/view'
 import type { Lang } from '@/i18n/lang'
 
 /*
@@ -32,7 +33,20 @@ function staticPaths(kind: 'category' | 'service') {
   }
 }
 
-const handle = (pageType: string): RouteHandle => ({ pageType })
+const handle = (pageType: string, cta?: RouteHandle['cta']): RouteHandle => ({ pageType, cta })
+
+/** Header + sticky-bar WhatsApp on a category page: "I need: Plumbing". */
+const categoryCta = (data: CategoryData) => ({
+  message: { kind: 'service' as const, name: data.category.name },
+  category: data.category.slug,
+})
+
+/** …and on a service page: "I need: Mixer tap replacement" (+ its extra lines). */
+const serviceCta = (data: ServiceData) => ({
+  message: { kind: 'service' as const, name: data.service.name, extraLines: data.service.waExtraLines },
+  category: data.category.slug,
+  service: data.service.slug,
+})
 
 function pageRoutes(lang: Lang): RouteRecord[] {
   return [
@@ -53,14 +67,14 @@ function pageRoutes(lang: Lang): RouteRecord[] {
       lazy: () => import('@/pages/Category'),
       loader: load(lang, (v) => (c, l, p) => v.categoryData(c, l, p.category)),
       getStaticPaths: staticPaths('category'),
-      handle: handle('category'),
+      handle: handle('category', categoryCta as RouteHandle['cta']),
     },
     {
       path: 'services/:category/:service',
       lazy: () => import('@/pages/ServiceDetail'),
       loader: load(lang, (v) => (c, l, p) => v.serviceData(c, l, p.category, p.service)),
       getStaticPaths: staticPaths('service'),
-      handle: handle('service'),
+      handle: handle('service', serviceCta as RouteHandle['cta']),
     },
     {
       path: 'products',

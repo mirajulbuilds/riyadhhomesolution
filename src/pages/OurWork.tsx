@@ -1,21 +1,23 @@
 import { useLoaderData } from 'react-router-dom'
-import { PageHeader, Phase2Note } from '@/components/PageHeader'
+import { Gallery } from '@/components/gallery/Gallery'
+import { CtaBand } from '@/components/HomeBlocks'
+import { PageHeader } from '@/components/PageHeader'
 import { Seo } from '@/components/Seo'
 import { useStrings } from '@/components/site-context'
 import type { OurWorkData } from '@/content/view'
 
+/** Our Work gallery (brief §6.5): filter by category, lightbox, before/after slider, area + date. */
 export function Component() {
   const data = useLoaderData() as OurWorkData
   const t = useStrings()
   return (
     <>
       <Seo title={t.pages.ourWorkTitle} description={t.pages.ourWorkDescription} />
-      <PageHeader title={t.pages.ourWorkTitle} lead={t.pages.ourWorkDescription}>
-        <p className="mt-4 text-sm text-muted" dir="ltr" lang="en">
-          {data.items.length} photos · {data.categories.length} filters
-        </p>
-      </PageHeader>
-      <Phase2Note what="filterable gallery, lightbox, before/after slider" />
+      <PageHeader title={t.pages.ourWorkTitle} lead={t.work.lead} />
+      <div className="container-x py-10 lg:py-14">
+        <Gallery items={data.items} categories={data.categories} />
+      </div>
+      <CtaBand />
     </>
   )
 }

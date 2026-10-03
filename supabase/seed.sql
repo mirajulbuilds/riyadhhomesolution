@@ -99,7 +99,7 @@ on conflict (key) do nothing;
 insert into public.settings (key, value)
 values (
   'service_areas',
-  '[{"key":"ghirnatah","ar":"غرناطة","en":"Ghirnatah"},{"key":"qurtubah","ar":"قرطبة","en":"Qurtubah"},{"key":"ash-shuhada","ar":"الشهداء","en":"Ash Shuhada"},{"key":"al-hamra","ar":"الحمراء","en":"Al Hamra"},{"key":"al-yarmuk","ar":"اليرموك","en":"Al Yarmuk"},{"key":"al-falah","ar":"الفلاح","en":"Al Falah"},{"key":"al-izdihar","ar":"الازدهار","en":"Al Izdihar"},{"key":"at-taawun","ar":"التعاون","en":"At Taawun"},{"key":"al-wadi","ar":"الوادي","en":"Al Wadi"}]'::jsonb
+  '[{"key":"ghirnatah","ar":"غرناطة","en":"Ghirnatah","lat":24.7919,"lng":46.7443},{"key":"qurtubah","ar":"قرطبة","en":"Qurtubah","lat":24.8162,"lng":46.7358},{"key":"ash-shuhada","ar":"الشهداء","en":"Ash Shuhada","lat":24.786,"lng":46.739},{"key":"al-hamra","ar":"الحمراء","en":"Al Hamra","lat":24.7755,"lng":46.7535},{"key":"al-yarmuk","ar":"اليرموك","en":"Al Yarmuk","lat":24.8079,"lng":46.7835},{"key":"al-falah","ar":"الفلاح","en":"Al Falah","lat":24.7963,"lng":46.7088},{"key":"al-izdihar","ar":"الازدهار","en":"Al Izdihar","lat":24.7794,"lng":46.7181},{"key":"at-taawun","ar":"التعاون","en":"At Taawun","lat":24.7743,"lng":46.6989},{"key":"al-wadi","ar":"الوادي","en":"Al Wadi","lat":24.7894,"lng":46.6914}]'::jsonb
 )
 on conflict (key) do nothing;
 
@@ -128,6 +128,13 @@ insert into public.settings (key, value)
 values (
   'google_place_id',
   '""'::jsonb
+)
+on conflict (key) do nothing;
+
+insert into public.settings (key, value)
+values (
+  'site_images',
+  '{"about_shop":"","about_team":""}'::jsonb
 )
 on conflict (key) do nothing;
 
