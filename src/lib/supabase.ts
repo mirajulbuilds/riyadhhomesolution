@@ -1,9 +1,9 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 /*
- * Browser Supabase client, loaded on demand (review form, admin panel, client-side refresh of
- * reviews/gallery) so supabase-js never weighs on the first page load.
- * Build-time reads use src/content/server.ts instead.
+ * Browser Supabase client, loaded on demand (review form, client-side refresh of reviews/gallery)
+ * so supabase-js never weighs on the first page load. Build-time reads use src/content/server.ts.
+ * The admin panel is a separate app with its own client (admin/src/supabase.ts).
  */
 
 let clientPromise: Promise<SupabaseClient> | undefined
@@ -18,8 +18,8 @@ export function getSupabase(): Promise<SupabaseClient> {
   clientPromise ??= import('@supabase/supabase-js').then(({ createClient }) =>
     createClient(import.meta.env.VITE_SUPABASE_URL!, import.meta.env.VITE_SUPABASE_ANON_KEY!, {
       auth: {
-        // Only the admin panel signs in; public pages never need a stored session.
-        persistSession: typeof window !== 'undefined' && window.location.pathname.startsWith('/admin'),
+        // Visitors never sign in.
+        persistSession: false,
         autoRefreshToken: true,
         detectSessionInUrl: false,
       },

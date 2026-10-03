@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+/* The admin panel (admin/) is a separate app with its own CSS: keep its classes out of the site's. */
+@source not '../../admin';
 
 /*
  * IBM Plex Sans Arabic (OFL-1.1 — see assets/fonts/OFL-IBM-Plex-Sans-Arabic.txt; files taken from

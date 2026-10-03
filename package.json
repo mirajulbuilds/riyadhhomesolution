@@ -8,8 +8,10 @@
   },
   "scripts": {
     "dev": "vite-react-ssg dev",
-    "build": "vite-react-ssg build",
+    "dev:admin": "vite --config admin/vite.config.ts",
+    "build": "vite-react-ssg build && tsx admin/build.ts",
     "preview": "vite preview",
+    "preview:pages": "npx --yes wrangler@4 pages dev dist --port 8788",
     "typecheck": "tsc --noEmit",
     "seed:sql": "tsx scripts/generate-seed-sql.ts",
     "illustrations": "tsx scripts/export-illustrations.ts"

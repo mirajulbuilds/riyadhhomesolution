@@ -1,4 +1,3 @@
 # Phase 5 replaces this with a build-generated file that also lists the sitemap.
 User-agent: *
 Allow: /
-Disallow: /admin

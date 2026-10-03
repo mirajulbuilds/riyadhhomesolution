@@ -1,0 +1,28 @@
+/* Only admin/src is scanned, so the admin CSS never picks up public-site classes (and vice versa:
+   src/styles/index.css excludes admin/). System fonts only: nothing is downloaded. */
+@import 'tailwindcss' source(none);
+@source '.';
+
+@theme {
+  --color-navy: #0b2545;
+  --color-orange: #f28c28;
+  --color-bg: #f7f8fa;
+  --color-line: #e3e8ef;
+  --color-ink: #1f2937;
+  --color-muted: #4b5563;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Tahoma, 'Noto Sans Arabic', Arial, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-orange);
+  outline-offset: 2px;
+}
