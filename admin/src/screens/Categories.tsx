@@ -211,7 +211,7 @@ function CategoryForm({ sb, id }: { sb: Supabase; id: string }) {
 export function SaveBar({ busy, dirty, onSave, children }: { busy: boolean; dirty: boolean; onSave: () => void; children?: ReactNode }) {
   const { t } = useT()
   return (
-    <div className="fixed inset-x-0 bottom-16 z-30 border-t border-line bg-white/95 px-4 py-3 backdrop-blur sm:bottom-0">
+    <div className="fixed inset-x-0 bottom-16 z-30 border-t border-line bg-white/95 px-4 py-3 backdrop-blur lg:bottom-0">
       <div className="mx-auto flex max-w-3xl items-center gap-3">
         {children}
         <Button className="ms-auto min-w-32" disabled={busy || !dirty} onClick={onSave}>

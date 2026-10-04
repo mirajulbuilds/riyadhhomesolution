@@ -10,7 +10,7 @@ type Counts = { total: number; active: number; noPhoto: number; noLongText: numb
 /** Counts that need attention + the "Unpublished changes" indicator (Publish comes in step 4). */
 export function Dashboard({ sb }: { sb: Supabase }) {
   const { t, lang } = useT()
-  const { go } = useNav()
+  const { go, pending } = useNav()
   const [counts, setCounts] = useState<Counts | null>(null)
   const [lastEdit, setLastEdit] = useState<string | null>(null)
   const [lastPublish, setLastPublish] = useState<string | null>(null)
@@ -51,6 +51,19 @@ export function Dashboard({ sb }: { sb: Supabase }) {
     <div className="space-y-5">
       <h1 className="text-2xl font-bold text-navy">{t.dashboard}</h1>
       {failed && <Notice>{t.loadFailed}</Notice>}
+
+      <button
+        type="button"
+        onClick={() => go('reviews', { tab: 'pending' })}
+        className={`flex w-full items-center gap-4 rounded-2xl border p-4 text-start shadow-sm ${pending ? 'border-orange bg-orange/10' : 'border-line bg-white'} hover:border-navy`}
+      >
+        <span className={`text-4xl font-bold ${pending ? 'text-orange' : 'text-navy'}`}>{pending}</span>
+        <span className="min-w-0 flex-1">
+          <span className="block font-bold text-navy">{t.dashPendingReviews}</span>
+          <span className="block text-sm text-muted">{pending ? t.dashPendingHelp : t.dashNoPending}</span>
+        </span>
+        <span aria-hidden="true" className="text-2xl text-navy">{lang === 'ar' ? '←' : '→'}</span>
+      </button>
 
       <Card title={unpublished ? `● ${t.unpublished}` : t.unpublished}>
         <p className={unpublished ? 'mb-4 font-semibold text-amber-800' : 'mb-4 text-muted'}>

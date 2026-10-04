@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect } from 'react'
  * segment); details go in the query string: <base>services?id=…, <base>services?new=1.
  */
 
-export const PAGES = ['dashboard', 'categories', 'services', 'photos', 'security'] as const
+export const PAGES = ['dashboard', 'reviews', 'gallery', 'services', 'products', 'categories', 'photos', 'security', 'more'] as const
 export type Page = (typeof PAGES)[number]
 export type Params = Record<string, string>
 export interface Route {
@@ -32,9 +32,12 @@ export interface Nav {
   go: (page: Page, params?: Params, options?: { replace?: boolean; force?: boolean }) => void
   /** A form registers "has unsaved changes?" here while it is open. */
   setDirty: (dirty: boolean) => void
+  /** Reviews waiting for approval (badge in the navigation); refreshPending() re-counts. */
+  pending: number
+  refreshPending: () => void
 }
 
-export const NavContext = createContext<Nav>({ route: { page: 'dashboard', params: {} }, go: () => {}, setDirty: () => {} })
+export const NavContext = createContext<Nav>({ route: { page: 'dashboard', params: {} }, go: () => {}, setDirty: () => {}, pending: 0, refreshPending: () => {} })
 export const useNav = () => useContext(NavContext)
 
 /** Marks the open form as changed: in-panel navigation asks first, and so does closing the tab. */

@@ -32,13 +32,23 @@ export function stripExtensions(name: string): string {
   return base
 }
 
-/** Lowercase letters and digits only, minus copy suffixes such as " (1)", "-copy", "_2". */
+/** Lowercase letters and digits only. */
 export function compact(name: string): string {
   return stripExtensions(name)
     .toLowerCase()
-    .replace(/\s*\(\d+\)$/, '')
-    .replace(/[-_\s]+(copy|\d{1,2})$/, '')
     .replace(/[^a-z0-9]/g, '')
+}
+
+/**
+ * The ways a file name is compared: as written, and without a copy suffix such as " (1)",
+ * "-copy", "_2". Both are tried, because a real name may end in a number too ("pipe-20",
+ * "LED panel 60x60"); the slugs themselves are never shortened.
+ */
+export function fileKeys(name: string): string[] {
+  const base = stripExtensions(name)
+  // One suffix at most: "PPR pipe 20 (3)" → "PPR pipe 20", never "PPR pipe".
+  const variants = [base, base.replace(/\s*\(\d+\)$/, ''), base.replace(/[-_\s]+(copy|\d{1,2})$/i, '')]
+  return [...new Set(variants.map(compact))].filter(Boolean)
 }
 
 function similarity(a: string, b: string): number {
@@ -61,14 +71,16 @@ export function matchFile(file: string, targets: MatchTarget[]): Match {
   const exact = targets.find((t) => t.slug === base)
   if (exact) return { file, target: exact, kind: 'exact', score: 100 }
 
-  const key = compact(file)
-  const same = targets.find((t) => compact(t.slug) === key || compact(t.categorySlug + t.slug) === key)
-  if (same) return { file, target: same, kind: 'close', score: 100 }
+  const keys = fileKeys(file)
+  for (const key of keys) {
+    const same = targets.find((t) => compact(t.slug) === key || compact(t.categorySlug + t.slug) === key)
+    if (same) return { file, target: same, kind: 'close', score: 100 }
+  }
 
   let best: MatchTarget | null = null
   let bestScore = 0
   for (const t of targets) {
-    const score = Math.max(similarity(key, compact(t.slug)), similarity(key, compact(t.categorySlug + t.slug)))
+    const score = Math.max(...keys.flatMap((key) => [similarity(key, compact(t.slug)), similarity(key, compact(t.categorySlug + t.slug))]), 0)
     if (score > bestScore) [best, bestScore] = [t, score]
   }
   return bestScore >= MIN_SIMILARITY

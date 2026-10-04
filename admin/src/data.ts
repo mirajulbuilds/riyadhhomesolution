@@ -181,3 +181,122 @@ export function move<T>(items: T[], from: number, to: number): T[] {
   next.splice(to, 0, item)
   return next
 }
+
+/* ---------------------------------------------------------------- gallery, products, reviews */
+
+export interface GalleryRow {
+  id: string
+  category_id: string | null
+  /** A service-area key from settings.service_areas, or free text. */
+  district: string | null
+  caption_ar: string | null
+  caption_en: string | null
+  image_url: string
+  thumb_url: string | null
+  before_image_url: string | null
+  taken_on: string | null
+  sort_order: number
+  is_active: boolean
+}
+
+export const GALLERY_COLUMNS = 'id, category_id, district, caption_ar, caption_en, image_url, thumb_url, before_image_url, taken_on, sort_order, is_active'
+
+/** The editable fields of a gallery photo (the image URLs are written by the photo actions only). */
+export function cleanGallery(g: GalleryRow) {
+  return {
+    category_id: g.category_id || null,
+    district: text(g.district),
+    caption_ar: text(g.caption_ar),
+    caption_en: text(g.caption_en),
+    taken_on: g.taken_on || null,
+    sort_order: g.sort_order,
+    is_active: g.is_active,
+  }
+}
+
+export interface ProductCategoryRow {
+  id: string
+  slug: string
+  name_ar: string
+  name_en: string
+  sort_order: number
+  is_active: boolean
+}
+
+export interface ProductRow {
+  id: string
+  category_id: string
+  name_ar: string
+  name_en: string
+  spec_ar: string | null
+  spec_en: string | null
+  image_url: string | null
+  sort_order: number
+  is_active: boolean
+}
+
+export const PRODUCT_CATEGORY_COLUMNS = 'id, slug, name_ar, name_en, sort_order, is_active'
+export const PRODUCT_COLUMNS = 'id, category_id, name_ar, name_en, spec_ar, spec_en, image_url, sort_order, is_active'
+
+export function cleanProductCategory(c: ProductCategoryRow) {
+  return { slug: c.slug.trim(), name_ar: c.name_ar.trim(), name_en: c.name_en.trim(), sort_order: c.sort_order, is_active: c.is_active }
+}
+
+export function cleanProduct(p: ProductRow) {
+  return {
+    category_id: p.category_id,
+    name_ar: p.name_ar.trim(),
+    name_en: p.name_en.trim(),
+    spec_ar: text(p.spec_ar),
+    spec_en: text(p.spec_en),
+    sort_order: p.sort_order,
+    is_active: p.is_active,
+  }
+}
+
+export type ReviewStatus = 'pending' | 'approved' | 'rejected'
+export type ReviewSource = 'website' | 'whatsapp' | 'in_person' | 'phone' | 'other'
+export const MANUAL_SOURCES: ReviewSource[] = ['whatsapp', 'in_person', 'phone', 'other']
+
+export interface ReviewRow {
+  id: string
+  name: string
+  district: string | null
+  service_text: string | null
+  rating: number
+  body: string
+  original_body: string | null
+  /** Public copy (bucket "site"), only while approved. */
+  photo_url: string | null
+  /** Private original (bucket "reviews"). */
+  photo_path: string | null
+  source: ReviewSource
+  status: ReviewStatus
+  admin_note: string | null
+  phone: string | null
+  created_at: string
+}
+
+export const REVIEW_COLUMNS = 'id, name, district, service_text, rating, body, original_body, photo_url, photo_path, source, status, admin_note, phone, created_at'
+
+/** How many OTHER reviews share each review's phone number (phones are stored normalized, E.164). */
+export function otherReviewCounts(reviews: Pick<ReviewRow, 'id' | 'phone'>[]): Map<string, number> {
+  const perPhone = new Map<string, number>()
+  for (const r of reviews) if (r.phone) perPhone.set(r.phone, (perPhone.get(r.phone) ?? 0) + 1)
+  return new Map(reviews.map((r) => [r.id, r.phone ? perPhone.get(r.phone)! - 1 : 0]))
+}
+
+/** "+966501234567" → "966501234567" for wa.me links. */
+export const waNumber = (phone: string) => phone.replace(/\D/g, '')
+
+/** Contains Arabic letters (used to pick the language of the WhatsApp message to a customer). */
+export const hasArabic = (s: string) => /[؀-ۿ]/.test(s)
+
+/** A wa.me link with a short neutral message, in Arabic unless the review is written in another script. */
+export function reviewWhatsAppLink(r: Pick<ReviewRow, 'phone' | 'body' | 'name'>): string | null {
+  if (!r.phone) return null
+  const message = hasArabic(r.body + r.name)
+    ? 'السلام عليكم، معك رياض هوم سوليوشن بخصوص تقييمك.'
+    : 'Hello, this is Riyadh Home Solution about your review.'
+  return `https://wa.me/${waNumber(r.phone)}?text=${encodeURIComponent(message)}`
+}

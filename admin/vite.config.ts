@@ -49,6 +49,9 @@ export default defineConfig(({ mode }) => {
       outDir: fileURLToPath(new URL(`../dist/${check.path}`, import.meta.url)),
       emptyOutDir: true,
       sourcemap: false,
+      // One file for the whole panel (~140 kB gzipped, mostly React + supabase-js), cached after
+      // the first visit; splitting it would only add round trips on a phone.
+      chunkSizeWarningLimit: 650,
     },
     server: { port: 5174, strictPort: true },
   }

@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type DragEvent } from 'react'
-import type { ServiceRow } from '../data'
+import { slugify } from '../data'
 import { Badge, PageTitle } from '../form'
 import { useT } from '../i18n'
-import { serviceFolder, serviceVariants, storeImage, thumbOf } from '../images'
-import { duplicateTargets, matchFile, type Match } from '../match'
-import { useUnsavedGuard } from '../nav'
+import { UnreadableImageError, serviceFolder, serviceVariants, storeImage, thumbOf } from '../images'
+import { duplicateTargets, matchFile, type Match, type MatchTarget } from '../match'
+import { useNav, useUnsavedGuard } from '../nav'
 import type { Supabase } from '../supabase'
 import { useToast } from '../toast'
 import { Button, Notice } from '../ui'
+import { useProducts } from './Products'
 import { useCatalog } from './Services'
 
 interface Item {
@@ -15,17 +16,108 @@ interface Item {
   file: File
   preview: string
   match: Match
-  /** Service chosen for this file ('' = skip). */
+  /** Service / product chosen for this file ('' = skip). */
   target: string
   state: 'ready' | 'done' | 'failed'
   error?: string
 }
 
-/** Drop many photos, check the automatic file-name → service matches, then upload them in one go. */
+/** Photos page: bulk upload for services, or for products (?for=products). */
 export function BulkPhotos({ sb }: { sb: Supabase }) {
+  const { t } = useT()
+  const { route, go } = useNav()
+  const forProducts = route.params.for === 'products'
+  const tab = (active: boolean) => `min-h-12 flex-1 rounded-xl px-4 font-semibold ${active ? 'bg-navy text-white' : 'text-navy'}`
+  return (
+    <div className="space-y-5 pb-24">
+      <PageTitle title={t.photosTitle} />
+      <div className="flex gap-1 rounded-2xl border border-line bg-white p-1" role="tablist">
+        <button type="button" role="tab" aria-selected={!forProducts} className={tab(!forProducts)} onClick={() => go('photos')}>
+          {t.navServices}
+        </button>
+        <button type="button" role="tab" aria-selected={forProducts} className={tab(forProducts)} onClick={() => go('photos', { for: 'products' })}>
+          {t.navProducts}
+        </button>
+      </div>
+      {forProducts ? <ProductPhotos sb={sb} /> : <ServicePhotos sb={sb} />}
+    </div>
+  )
+}
+
+/** What the matcher needs to know about the rows that can get a photo. */
+interface MatcherSource {
+  ready: boolean
+  failed: boolean
+  help: string
+  targets: MatchTarget[]
+  /** The dropdown: rows grouped by category. */
+  groups: { id: string; label: string; options: { id: string; label: string }[] }[]
+  current: (id: string) => string | null
+  /** Compresses, uploads and saves one photo. */
+  upload: (id: string, file: File) => Promise<void>
+}
+
+const byName = (lang: string) => (x: { name_ar: string; name_en: string }) => (lang === 'ar' ? x.name_ar : x.name_en)
+
+function ServicePhotos({ sb }: { sb: Supabase }) {
   const { t, lang } = useT()
-  const toast = useToast()
   const { categories, services, setServices, failed } = useCatalog(sb)
+  const source = useMemo<MatcherSource>(() => {
+    const name = byName(lang)
+    const catSlug = new Map((categories ?? []).map((c) => [c.id, c.slug]))
+    return {
+      ready: !!services,
+      failed,
+      help: t.photosHelp,
+      targets: (services ?? []).map((s) => ({ id: s.id, slug: s.slug, categorySlug: catSlug.get(s.category_id) ?? '' })),
+      groups: (categories ?? []).map((c) => ({
+        id: c.id,
+        label: name(c),
+        options: (services ?? []).filter((s) => s.category_id === c.id).map((s) => ({ id: s.id, label: `${name(s)} · ${s.slug}` })),
+      })),
+      current: (id) => services?.find((s) => s.id === id)?.image_url ?? null,
+      upload: async (id, file) => {
+        const files = await serviceVariants(file)
+        const { url } = await storeImage(sb, serviceFolder(id), files, (u) => sb.from('services').update({ image_url: u }).eq('id', id).select('id').single())
+        setServices((all) => all && all.map((s) => (s.id === id ? { ...s, image_url: url } : s)))
+      },
+    }
+  }, [categories, services, setServices, failed, lang, t, sb])
+  return <BulkMatcher source={source} />
+}
+
+/** Products have no web address: file names are matched to the English name made into one ("Mixer tap (wall)" → mixer-tap-wall). */
+function ProductPhotos({ sb }: { sb: Supabase }) {
+  const { t, lang } = useT()
+  const { categories, products, setProducts, failed } = useProducts(sb)
+  const source = useMemo<MatcherSource>(() => {
+    const name = byName(lang)
+    const catSlug = new Map((categories ?? []).map((c) => [c.id, c.slug]))
+    return {
+      ready: !!products,
+      failed,
+      help: t.productPhotosHelp,
+      targets: (products ?? []).map((p) => ({ id: p.id, slug: slugify(p.name_en), categorySlug: catSlug.get(p.category_id) ?? '' })),
+      groups: (categories ?? []).map((c) => ({
+        id: c.id,
+        label: name(c),
+        options: (products ?? []).filter((p) => p.category_id === c.id).map((p) => ({ id: p.id, label: `${name(p)} · ${slugify(p.name_en)}` })),
+      })),
+      current: (id) => products?.find((p) => p.id === id)?.image_url ?? null,
+      upload: async (id, file) => {
+        const files = await serviceVariants(file)
+        const { url } = await storeImage(sb, id, files, (u) => sb.from('products').update({ image_url: u }).eq('id', id).select('id').single(), 'products')
+        setProducts((all) => all && all.map((p) => (p.id === id ? { ...p, image_url: url } : p)))
+      },
+    }
+  }, [categories, products, setProducts, failed, lang, t, sb])
+  return <BulkMatcher source={source} />
+}
+
+/** Drop many photos, check the automatic file-name matches, then upload them in one go. */
+function BulkMatcher({ source }: { source: MatcherSource }) {
+  const { t } = useT()
+  const toast = useToast()
   const [items, setItems] = useState<Item[]>([])
   const [running, setRunning] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -36,21 +128,15 @@ export function BulkPhotos({ sb }: { sb: Supabase }) {
   useEffect(() => () => previews.current.forEach((url) => URL.revokeObjectURL(url)), [])
   useUnsavedGuard(running || items.some((i) => i.state === 'ready' && i.target))
 
-  const byId = useMemo(() => new Map((services ?? []).map((s) => [s.id, s])), [services])
-  const targets = useMemo(() => {
-    const catSlug = new Map((categories ?? []).map((c) => [c.id, c.slug]))
-    return (services ?? []).map((s) => ({ id: s.id, slug: s.slug, categorySlug: catSlug.get(s.category_id) ?? '' }))
-  }, [categories, services])
   const duplicates = duplicateTargets(items.filter((i) => i.state !== 'done').map((i) => i.target || null))
   const toUpload = items.filter((i) => i.target && i.state !== 'done')
-  const name = (s: ServiceRow) => (lang === 'ar' ? s.name_ar : s.name_en)
 
   function addFiles(files: FileList | File[]) {
     const images = Array.from(files).filter((f) => f.type.startsWith('image/') || /\.(heic|heif)$/i.test(f.name))
     const added = images.map((file): Item => {
       const preview = URL.createObjectURL(file)
       previews.current.push(preview)
-      const match = matchFile(file.name, targets)
+      const match = matchFile(file.name, source.targets)
       return { key: `${file.name}-${file.size}-${Math.random()}`, file, preview, match, target: match.target?.id ?? '', state: 'ready' }
     })
     setItems((all) => [...all, ...added])
@@ -70,16 +156,13 @@ export function BulkPhotos({ sb }: { sb: Supabase }) {
     let ok = 0
     let bad = 0
     for (const item of toUpload) {
-      const id = item.target
       let result: Partial<Item>
       try {
-        const files = await serviceVariants(item.file)
-        const { url } = await storeImage(sb, serviceFolder(id), files, (u) => sb.from('services').update({ image_url: u }).eq('id', id).select('id').single())
-        setServices((all) => all && all.map((s) => (s.id === id ? { ...s, image_url: url } : s)))
+        await source.upload(item.target, item.file)
         result = { state: 'done', error: undefined }
         ok++
       } catch (e) {
-        result = { state: 'failed', error: (e as Error).message }
+        result = { state: 'failed', error: e instanceof UnreadableImageError ? t.unreadableImage(e.fileName) : (e as Error).message }
         bad++
       }
       setItems((all) => all.map((x) => (x.key === item.key ? { ...x, ...result } : x)))
@@ -101,7 +184,7 @@ export function BulkPhotos({ sb }: { sb: Supabase }) {
   const failedItems = items.filter((i) => i.state === 'failed')
 
   const row = (item: Item) => {
-    const current = item.target ? byId.get(item.target) : undefined
+    const currentUrl = item.target ? source.current(item.target) : null
     const clash = !!item.target && duplicates.has(item.target) && item.state !== 'done'
     return (
       <li key={item.key} className={`rounded-2xl border bg-white p-3 ${clash ? 'border-red-400 ring-2 ring-red-200' : 'border-line'}`}>
@@ -110,9 +193,9 @@ export function BulkPhotos({ sb }: { sb: Supabase }) {
             <img src={item.preview} alt="" className="size-20 rounded-lg bg-bg object-cover" />
             <figcaption className="pt-1 text-xs text-muted">{t.newPhoto}</figcaption>
           </figure>
-          {current?.image_url && (
+          {currentUrl && (
             <figure className="shrink-0 text-center">
-              <img src={thumbOf(current.image_url)!} alt="" className="size-20 rounded-lg bg-bg object-cover opacity-80" />
+              <img src={thumbOf(currentUrl)!} alt="" className="size-20 rounded-lg bg-bg object-cover opacity-80" />
               <figcaption className="pt-1 text-xs text-muted">{t.currentPhoto}</figcaption>
             </figure>
           )}
@@ -125,43 +208,40 @@ export function BulkPhotos({ sb }: { sb: Supabase }) {
               {item.match.kind === 'close' && <Badge tone="warn">{t.matchClose(item.match.score)}</Badge>}
               {item.state === 'done' && <Badge tone="navy">✓ {t.stateDone}</Badge>}
               {item.state === 'failed' && <Badge tone="warn">✕ {t.stateFailed}</Badge>}
-              {current?.image_url && item.state === 'ready' && <Badge>{t.replacesCurrent}</Badge>}
+              {currentUrl && item.state === 'ready' && <Badge>{t.replacesCurrent}</Badge>}
             </div>
           </div>
         </div>
-        {/* Full width under the pictures, so service names stay readable on a phone. */}
+        {/* Full width under the pictures, so names stay readable on a phone. */}
         <div className="mt-3 space-y-2">
           <select
-              value={item.target}
-              disabled={running || item.state === 'done'}
-              onChange={(e) => setItems((all) => all.map((x) => (x.key === item.key ? { ...x, target: e.target.value, state: 'ready', error: undefined } : x)))}
-              aria-label={item.file.name}
-              className="block min-h-12 w-full rounded-xl border border-line bg-white px-3 text-base"
-            >
-              <option value="">{item.match.kind === 'none' ? t.chooseService : t.skipFile}</option>
-              {categories?.map((c) => (
-                <optgroup key={c.id} label={lang === 'ar' ? c.name_ar : c.name_en}>
-                  {services
-                    ?.filter((s) => s.category_id === c.id)
-                    .map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {name(s)} · {s.slug}
-                      </option>
-                    ))}
-                </optgroup>
-              ))}
-            </select>
-            {item.error && <p className="text-sm text-red-700">{item.error}</p>}
+            value={item.target}
+            disabled={running || item.state === 'done'}
+            onChange={(e) => setItems((all) => all.map((x) => (x.key === item.key ? { ...x, target: e.target.value, state: 'ready', error: undefined } : x)))}
+            aria-label={item.file.name}
+            className="block min-h-12 w-full rounded-xl border border-line bg-white px-3 text-base"
+          >
+            <option value="">{item.match.kind === 'none' ? t.chooseItem : t.skipFile}</option>
+            {source.groups.map((g) => (
+              <optgroup key={g.id} label={g.label}>
+                {g.options.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+          {item.error && <p className="text-sm text-red-700">{item.error}</p>}
         </div>
       </li>
     )
   }
 
   return (
-    <div className="space-y-5 pb-24">
-      <PageTitle title={t.photosTitle} />
-      <p className="text-muted">{t.photosHelp}</p>
-      {failed && <Notice>{t.loadFailed}</Notice>}
+    <div className="space-y-5">
+      <p className="text-muted">{source.help}</p>
+      {source.failed && <Notice>{t.loadFailed}</Notice>}
 
       <label
         onDragOver={(e) => {
@@ -172,12 +252,12 @@ export function BulkPhotos({ sb }: { sb: Supabase }) {
         onDrop={onDrop}
         className={`flex min-h-36 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center font-semibold text-navy ${
           dragOver ? 'border-orange bg-orange/10' : 'border-line bg-white'
-        } ${running || !services ? 'pointer-events-none opacity-50' : ''}`}
+        } ${running || !source.ready ? 'pointer-events-none opacity-50' : ''}`}
       >
         {t.dropHere}
         <input
           type="file"
-          accept="image/*"
+          accept="image/*,.heic,.heif"
           multiple
           className="sr-only"
           onChange={(e) => {
@@ -207,13 +287,12 @@ export function BulkPhotos({ sb }: { sb: Supabase }) {
       {duplicates.size > 0 && <Notice tone="warn">{t.duplicateWarning}</Notice>}
       {failedItems.length > 0 && !running && (
         <Notice>
-          {t.failedFiles}{' '}
-          {failedItems.map((i) => `${i.file.name} (${i.error})`).join(', ')}
+          {t.failedFiles} {failedItems.map((i) => `${i.file.name} (${i.error})`).join(', ')}
         </Notice>
       )}
 
       {items.length > 0 && (
-        <div className="fixed inset-x-0 bottom-16 z-30 border-t border-line bg-white/95 px-4 py-3 backdrop-blur sm:bottom-0">
+        <div className="fixed inset-x-0 bottom-16 z-30 border-t border-line bg-white/95 px-4 py-3 backdrop-blur lg:bottom-0">
           <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-3">
             {running ? (
               <div className="min-w-0 flex-1">
