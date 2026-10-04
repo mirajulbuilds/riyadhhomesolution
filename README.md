@@ -100,7 +100,8 @@ login. On a Free plan Supabase cannot end sessions early: the access token lasts
 - use a private/incognito window (it forgets everything when closed);
 - clear the browser's data (cookies and site data);
 - use another browser, phone or computer;
-- press "Log out everywhere" on any device;
+- press "Log out everywhere" on any device (other devices are signed out the next time they renew
+  their login; until then, at most 1 hour, their current token still works: a Supabase limit);
 - use an iPhone in Safari and stay away for more than about 7 days (Safari deletes site data of
   sites you haven't visited). **Add the panel to the Home Screen** (Share → Add to Home Screen) and
   open it from that icon: it then runs as its own app and keeps its login. It has its own storage,

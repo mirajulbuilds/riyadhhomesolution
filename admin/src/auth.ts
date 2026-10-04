@@ -17,7 +17,8 @@ export type AuthState =
   | { kind: 'challenge'; factors: Factor[] }
   | { kind: 'ready'; email: string }
 
-async function evaluate(sb: Supabase): Promise<AuthState> {
+/** Works out which sign-in step to show. Exported so the flow can be tested against Supabase. */
+export async function evaluate(sb: Supabase): Promise<AuthState> {
   const { data, error } = await sb.auth.getSession()
   const session = data.session
   if (!session) return error && isAuthRetryableFetchError(error) ? { kind: 'offline' } : { kind: 'signed-out' }
@@ -74,7 +75,11 @@ export function useAuth(sb: Supabase) {
       if (document.visibilityState !== 'visible') return
       const { data } = await sb.auth.getSession()
       const expiresAt = (data.session?.expires_at ?? 0) * 1000
-      if (data.session && expiresAt - Date.now() < 10 * 60_000) await sb.auth.refreshSession()
+      if (!data.session || expiresAt - Date.now() >= 10 * 60_000) return
+      const { error } = await sb.auth.refreshSession()
+      // Revoked ("Log out everywhere" on another device): leave now, not when the token runs out.
+      // A bad connection is retryable and never signs out.
+      if (error && !isAuthRetryableFetchError(error)) await sb.auth.signOut({ scope: 'local' })
     }
     document.addEventListener('visibilitychange', onVisible)
     return () => document.removeEventListener('visibilitychange', onVisible)
