@@ -51,9 +51,10 @@ export function CodeField({ value, onChange, label }: { value: string; onChange:
   )
 }
 
-export function Notice({ tone = 'error', children }: { tone?: 'error' | 'info' | 'ok'; children: ReactNode }) {
+export function Notice({ tone = 'error', children }: { tone?: 'error' | 'warn' | 'info' | 'ok'; children: ReactNode }) {
   const styles = {
     error: 'border-red-200 bg-red-50 text-red-800',
+    warn: 'border-amber-200 bg-amber-50 text-amber-900',
     info: 'border-line bg-white text-ink',
     ok: 'border-green-200 bg-green-50 text-green-800',
   }

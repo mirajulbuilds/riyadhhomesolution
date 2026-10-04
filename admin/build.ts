@@ -60,7 +60,8 @@ const csp = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
+  // Supabase storage serves the uploaded photos; blob: is the local preview before upload.
+  `img-src 'self' data: blob: ${supabase}`.trim(),
   `connect-src 'self' ${supabase}`.trim(),
   "object-src 'none'",
   "base-uri 'none'",

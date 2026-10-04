@@ -134,16 +134,63 @@ browser could read the saved login. Only add tags you trust in Google Tag Manage
 Anyone who can open your Supabase dashboard can do step 3, so protect your Supabase account with its
 own two-step login (supabase.com → Account → Security).
 
+## Phase 3 progress
+
+| Step | What | Status |
+|---|---|---|
+| 1 | Secure foundation: secret admin path, password + authenticator, database rule (aal2 + live session) | Done |
+| 2 | Dashboard, categories, services, single + bulk photo upload | Done |
+| 3 | Gallery, products, reviews, settings | Next |
+| 4 | "Publish changes" button (Edge Function → Cloudflare deploy hook) | Later |
+
+### Step 2: what the panel does
+
+The panel has five pages (a bottom bar on phones, links in the header on wide screens): Home,
+Categories, Services, Photos, Security. Saved changes go straight into the database (the database
+rules check every write); the public website shows them after the next build/publish.
+
+- **Home:** number of services, active services, services without a photo, and services with a
+  detail page but no long description (tap a number to see those services). "Unpublished changes"
+  appears when content changed after the last publish: database triggers store the time of every
+  change to categories or services in `settings.last_admin_edit` (migration
+  `20261004065427_last_admin_edit.sql`). The Publish button is shown but disabled until step 4.
+- **Categories:** the 6 categories (no add/delete). Drag (computer) or the arrows (phone) to
+  reorder. Edit: names, intro, "services covered" lists, WhatsApp message, order number, shown,
+  main category, illustration (upload a new one, or go back to the original
+  `/illustrations/<slug>.png`).
+- **Services:** grouped by category, with search and filters (category, shown/hidden, photo,
+  detail page / long text missing). Reorder inside a category with drag or arrows (when no search
+  or filter is active). Create, edit, delete (asks first). Every field of the `services` table,
+  including the lists (add / remove / move rows) and the questions and answers. The web address
+  (slug) is made from the English name, can be edited, and must be unique inside the category.
+  Turning on "detail page" with an empty long description shows a warning but still saves.
+- **Photos (one service):** add, replace or remove on the service page. The photo is compressed
+  in the browser (max 1600 px, WebP ~80 %, JPEG on Safari) plus a 600 px thumbnail.
+- **Photos (bulk):** drop many files on the Photos page. Each file name is matched to a service
+  slug: exact first (`mixer-tap-replacement.jpg`), then ignoring case, `_`, `-`, spaces,
+  extensions, copy numbers like ` (1)` and an optional category prefix, then the most similar slug
+  (80 % or more alike, so typos still match). Change any match or pick a service for unmatched
+  files; the current photo is shown next to the new one. Nothing is uploaded until **Confirm**;
+  two files for the same service must be resolved first. Progress is shown, a failed file does not
+  stop the others, and failures are listed at the end.
+
+**Photo storage** (public bucket `services`): `<service id>/<stamp>.webp` (shown on the site via
+`services.image_url`) and `<service id>/<stamp>-thumb.webp` (600 px; same name + `-thumb`).
+Category illustrations: `categories/<category id>/<stamp>.webp`. The new URL is saved first and the
+folder's old files are deleted afterwards, so replacing, removing or deleting never leaves files
+behind, and a failed save keeps the old photo. The panel's security header allows images from the
+Supabase project for these previews.
+
 ## Phase 3 (admin panel) — notes
 
 - **Reviews list:** on each pending review show a small badge such as "N other reviews from this
   number" (count by `reviews.phone`; index `reviews_phone_created_idx`). Repeat numbers are allowed —
   never block them. Show the phone with tap-to-call and WhatsApp buttons. Phone is optional on
   reviews the owner adds by hand.
-- **Categories:** edit `wa_message_ar/en` (the WhatsApp text on the category page) and override
-  `image_url` (default `/illustrations/<slug>.png`).
-- **Services:** optional `wa_message_ar/en` override.
 - **Settings:** `shop_lat` / `shop_lng` (map pin, directions, JSON-LD).
+- **Later (public site):** phone service cards could use the 600 px `-thumb` photo instead of the
+  full one, and the review / gallery / products / settings tables should get the same
+  `last_admin_edit` trigger when their screens are built.
 - **Edge Functions** used by admin features (`publish-site`, …) must refuse tokens without the
   authenticator code: verify the JWT, require the claim `aal` = `aal2`, a row in `public.admins`
   and a live session (`session_id` claim present in `auth.sessions`) — the same rule as
