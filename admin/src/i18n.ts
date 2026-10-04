@@ -65,7 +65,7 @@ const en = {
   signedInAs: (email: string) => `Signed in as ${email}`,
   logOutHelp: '“Log out” signs out this browser only.',
   logOutEverywhere: 'Log out everywhere',
-  logOutEverywhereHelp: '“Log out everywhere” signs out every phone and computer. Other devices stop working within an hour at most.',
+  logOutEverywhereHelp: '“Log out everywhere” signs out every phone and computer at once.',
   logOutEverywhereConfirm: 'Log out on every device, including this one?',
 }
 
@@ -134,7 +134,7 @@ const ar: Strings = {
   signedInAs: (email: string) => `مسجّل الدخول باسم ${email}`,
   logOutHelp: '«تسجيل الخروج» يخرجك من هذا المتصفح فقط.',
   logOutEverywhere: 'تسجيل الخروج من كل الأجهزة',
-  logOutEverywhereHelp: '«تسجيل الخروج من كل الأجهزة» يخرجك من كل جوال وكمبيوتر. الأجهزة الأخرى تتوقف خلال ساعة على الأكثر.',
+  logOutEverywhereHelp: '«تسجيل الخروج من كل الأجهزة» يخرجك من كل جوال وكمبيوتر فورًا.',
   logOutEverywhereConfirm: 'تسجيل الخروج من كل الأجهزة، ومنها هذا الجهاز؟',
 }
 

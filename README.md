@@ -82,10 +82,12 @@ the panel shows a QR code and the setup key to save. Only accounts listed in the
 in; any other account is signed out. There is no sign-up, no "forgot password" and no email link
 of any kind. After 5 wrong tries the form makes you wait 30 seconds (Supabase also limits attempts).
 
-**The database enforces it** (migration `20261003200448_admin_requires_mfa.sql`): every admin
-rule (all changes, hidden rows, the private review fields `phone` and `admin_note`, uploads) needs
-an admins-table account **and** a session confirmed with the authenticator code (`aal2`). A
-password-only session can do no more than a visitor. Public pages read exactly what they read before.
+**The database enforces it** (migrations `20261003200448_admin_requires_mfa.sql` and
+`20261004060233_admin_requires_live_session.sql`): every admin rule (all changes, hidden rows, the
+private review fields `phone` and `admin_note`, uploads) needs an admins-table account, a session
+confirmed with the authenticator code (`aal2`), **and** that session must still exist. A
+password-only session can do no more than a visitor, and a device that logged out is refused at
+once, even though its last token has not expired yet. Public pages read exactly what they read before.
 
 **Honest note:** the secret address is only an extra layer that keeps bots and curious visitors
 away. The real protection is the password + the authenticator code + the database rules. Someone
@@ -100,8 +102,9 @@ login. On a Free plan Supabase cannot end sessions early: the access token lasts
 - use a private/incognito window (it forgets everything when closed);
 - clear the browser's data (cookies and site data);
 - use another browser, phone or computer;
-- press "Log out everywhere" on any device (other devices are signed out the next time they renew
-  their login; until then, at most 1 hour, their current token still works: a Supabase limit);
+- press "Log out everywhere" on any device (every other device loses admin access in the database
+  immediately; its screen switches to the login page the next time the tab is opened or the login
+  renews);
 - use an iPhone in Safari and stay away for more than about 7 days (Safari deletes site data of
   sites you haven't visited). **Add the panel to the Home Screen** (Share → Add to Home Screen) and
   open it from that icon: it then runs as its own app and keeps its login. It has its own storage,
@@ -142,8 +145,9 @@ own two-step login (supabase.com → Account → Security).
 - **Services:** optional `wa_message_ar/en` override.
 - **Settings:** `shop_lat` / `shop_lng` (map pin, directions, JSON-LD).
 - **Edge Functions** used by admin features (`publish-site`, …) must refuse tokens without the
-  authenticator code: verify the JWT, require the claim `aal` = `aal2` and a row in `public.admins`
-  (the same rule as `private.is_admin()`).
+  authenticator code: verify the JWT, require the claim `aal` = `aal2`, a row in `public.admins`
+  and a live session (`session_id` claim present in `auth.sessions`) — the same rule as
+  `private.is_admin()`.
 - **New admin pages** must be one URL segment (`<ADMIN_PATH>/reviews`; use `?id=` for details),
   because the deep-link rule matches one segment so it never catches the panel's own files.
 
