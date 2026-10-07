@@ -77,6 +77,13 @@ on conflict (key) do nothing;
 
 insert into public.settings (key, value)
 values (
+  'hours_note',
+  '{"ar":"","en":""}'::jsonb
+)
+on conflict (key) do nothing;
+
+insert into public.settings (key, value)
+values (
   'emergency',
   '{"ar":"خدمة طوارئ على مدار الساعة","en":"Emergency service 24/7"}'::jsonb
 )
@@ -100,6 +107,13 @@ insert into public.settings (key, value)
 values (
   'technicians',
   '10'::jsonb
+)
+on conflict (key) do nothing;
+
+insert into public.settings (key, value)
+values (
+  'areas_count',
+  '0'::jsonb
 )
 on conflict (key) do nothing;
 

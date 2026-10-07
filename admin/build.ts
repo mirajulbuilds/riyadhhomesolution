@@ -6,7 +6,7 @@
  * If ADMIN_PATH is missing or weak, no admin panel is built at all (never a default like /admin):
  * the public site still deploys, and a warning is printed.
  */
-import { appendFileSync, existsSync } from 'node:fs'
+import { appendFileSync, existsSync, writeFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
 import { build, loadEnv } from 'vite'
 import { checkAdminPath, redact } from './path-rules.ts'
@@ -46,6 +46,10 @@ try {
 } catch (error) {
   fail(error instanceof Error ? (error.stack ?? error.message) : String(error))
 }
+
+// Build time, read by the Home screen after "Publish changes" to tell when the new site is live.
+// Inside the panel folder (noindex, no-store), so the public site has no such file.
+writeFileSync(`${dist}${path}/assets/build.json`, JSON.stringify({ built_at: new Date().toISOString() }))
 
 // Deep links (/<path>/security, …) serve the panel's index.html. Cloudflare applies _redirects even
 // when a file exists, so the rule matches one segment only and never catches /<path>/assets/….

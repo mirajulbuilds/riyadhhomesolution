@@ -1,4 +1,4 @@
-import { Camera, FolderTree, House, Images, Menu, Package, Shield, Star, Wrench, type LucideIcon } from 'lucide-react'
+import { Camera, FolderTree, House, Images, Menu, Package, Settings as SettingsIcon, Shield, Star, Wrench, type LucideIcon } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react'
 import { useAuth } from './auth'
 import { applyLang, initialLang, LangContext, strings, useT, type Lang } from './i18n'
@@ -15,6 +15,7 @@ import { Products } from './screens/Products'
 import { Reviews } from './screens/Reviews'
 import { Security } from './screens/Security'
 import { Services } from './screens/Services'
+import { Settings } from './screens/Settings'
 import { supabase, type Supabase } from './supabase'
 import { ToastProvider } from './toast'
 import { AuthPage, Button, LangToggle, Notice } from './ui'
@@ -112,6 +113,7 @@ function Panel({ sb, email, onLevelChange }: { sb: Supabase; email: string; onLe
     reviews: <Reviews sb={sb} />,
     gallery: <Gallery sb={sb} />,
     products: <Products sb={sb} />,
+    settings: <Settings sb={sb} />,
     more: <More />,
   }
 
@@ -136,6 +138,7 @@ export const NAV: NavItem[] = [
   { page: 'products', icon: Package, label: (t) => t.navProducts },
   { page: 'categories', icon: FolderTree, label: (t) => t.navCategories },
   { page: 'photos', icon: Images, label: (t) => t.navPhotos },
+  { page: 'settings', icon: SettingsIcon, label: (t) => t.navSettings },
   { page: 'security', icon: Shield, label: (t) => t.navSecurity },
 ]
 
@@ -167,7 +170,7 @@ function Shell({ sb, children }: { sb: Supabase; children: ReactNode }) {
     <div className="min-h-dvh pb-20 lg:pb-0">
       <header className="sticky top-0 z-40 bg-navy text-white">
         <div className="mx-auto flex max-w-6xl items-center gap-1 px-4 py-2">
-          <span className="me-auto text-lg font-bold">{t.appName}</span>
+          <span className="me-auto shrink-0 whitespace-nowrap text-lg font-bold">{t.appName}</span>
           <nav className="me-2 hidden gap-0.5 lg:flex">
             {NAV.map(({ page, label }) => (
               <a

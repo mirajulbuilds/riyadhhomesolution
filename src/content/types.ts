@@ -187,12 +187,16 @@ export interface SettingsValues {
   shop_lat: number
   shop_lng: number
   hours: OpeningHours[]
+  /** Optional line under the opening hours (e.g. Ramadan hours); empty = not shown. */
+  hours_note: Bilingual
   emergency: Bilingual
   since_year: number
   /** Shown as "20+". */
   years_in_building: number
   /** Shown as "10+". */
   technicians: number
+  /** "Areas we cover" number on the About page, shown as "9+"; 0 = the number of service_areas. */
+  areas_count: number
   service_areas: ServiceArea[]
   service_areas_note: Bilingual
   social: { facebook: string; instagram: string; tiktok: string; snapchat: string }
@@ -241,10 +245,12 @@ export interface Site {
   /** Shop location (settings shop_lat / shop_lng). */
   geo: { lat: number; lng: number }
   hours: OpeningHours[]
+  hoursNote: string
   emergency: string
   sinceYear: number
   yearsInBuilding: number
   technicians: number
+  areasCount: number
   areas: { key: string; name: string; lat?: number; lng?: number }[]
   areasNote: string
   images: { aboutShop: string | null; aboutTeam: string | null }

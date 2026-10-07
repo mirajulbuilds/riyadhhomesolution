@@ -69,10 +69,12 @@ export function toSite(content: SiteContent, lang: Lang): Site {
     mapsUrl: s.maps_url,
     geo: { lat: s.shop_lat, lng: s.shop_lng },
     hours: s.hours,
+    hoursNote: s.hours_note?.[lang]?.trim() ?? '',
     emergency: s.emergency[lang],
     sinceYear: s.since_year,
     yearsInBuilding: s.years_in_building,
     technicians: s.technicians,
+    areasCount: s.areas_count > 0 ? s.areas_count : s.service_areas.length,
     areas: s.service_areas.map((a) => ({ key: a.key, name: a[lang], lat: a.lat, lng: a.lng })),
     areasNote: s.service_areas_note[lang],
     images: {

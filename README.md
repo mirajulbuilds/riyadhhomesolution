@@ -4,8 +4,9 @@ Website for **رياض هوم سوليوشن / Riyadh Home Solution**, the hardw
 Ghirnatah, Riyadh. Information + lead site: every call to action goes to WhatsApp or a phone call.
 The full brief is in [PROJECT_BRIEF.md](PROJECT_BRIEF.md).
 
-> A step-by-step guide for the owner (no developer knowledge needed) is written in Phase 5.
-> This file is the developer quick start.
+> **Owner:** start with [How to use the admin](#how-to-use-the-admin) (no developer knowledge
+> needed). The full owner guide is finished in Phase 5. The rest of this file is the developer
+> quick start.
 
 ## Stack
 
@@ -141,7 +142,7 @@ own two-step login (supabase.com → Account → Security).
 | 1 | Secure foundation: secret admin path, password + authenticator, database rule (aal2 + live session) | Done |
 | 2 | Dashboard, categories, services, single + bulk photo upload | Done |
 | 3 | Gallery, products, reviews | Done |
-| 4 | Settings + "Publish changes" button (Edge Function → Cloudflare deploy hook) | Next |
+| 4 | Settings + "Publish changes" button (Edge Function → Cloudflare deploy hook) | Done (hook secret still to set) |
 
 ### Step 2: what the panel does
 
@@ -153,7 +154,7 @@ rules check every write); the public website shows them after the next build/pub
   detail page but no long description (tap a number to see those services). "Unpublished changes"
   appears when content changed after the last publish: database triggers store the time of every
   change to categories or services in `settings.last_admin_edit` (migration
-  `20261004065427_last_admin_edit.sql`). The Publish button is shown but disabled until step 4.
+  `20261004065427_last_admin_edit.sql`). The Publish button works since step 4 (see below).
 - **Categories:** the 6 categories (no add/delete). Drag (computer) or the arrows (phone) to
   reorder. Edit: names, intro, "services covered" lists, WhatsApp message, order number, shown,
   main category, illustration (upload a new one, or go back to the original
@@ -241,11 +242,118 @@ header. The Reviews link shows an orange count while reviews are waiting, and th
 `<product id>/<stamp>.webp` + `-thumb`. Every delete or replace lists the folder again afterwards
 and retries, so no file is left behind; if it still fails the panel says so.
 
+### Step 4: settings and "Publish changes"
+
+**Settings** (More → Settings on a phone). One form, one Save button; the database rules check every
+write. Each field is checked before saving and a wrong one is marked in red: phone and WhatsApp
+(Saudi mobile `05…`, landline `011…` or `+` and a country code; stored as shown `0500569163`, as
+`+966500569163` for calls and as `966500569163` for `wa.me`), opening hours (time pickers), years
+and counts (whole numbers), map positions (`lat, lng` inside the Riyadh area, latitude first), social
+links (empty, or `https://` on that network's own domain) and the Google Place ID. Under a field
+being edited the panel shows the value saved now; when a saved value differs from the original
+(seed) value it shows the original with a **Use original** button. Groups:
+
+| Group | Settings keys | Where the website shows it |
+|---|---|---|
+| Phone and WhatsApp | `phone_display`, `phone_e164`, `whatsapp_number`, `emergency` | Header/footer/contact, every Call and WhatsApp button, JSON-LD |
+| Opening hours | `hours` (Sat–Thu, Fri), `hours_note` (new, optional) | Footer, Contact, About, JSON-LD `openingHoursSpecification` |
+| Numbers | `since_year`, `years_in_building`, `technicians`, `areas_count` (new; 0 = number of areas) | Trust row, About numbers, JSON-LD `foundingDate` |
+| Service areas | `service_areas` (names, map position; add / edit / remove / reorder), `service_areas_note` | Area chips + map, district lists of the website forms, JSON-LD `areaServed` |
+| Shop location | `shop_lat`, `shop_lng` (**Use the verified location** restores 24.7950505, 46.7489991) | Map pin, Get directions, JSON-LD `geo` |
+| Social links | `social` (empty = icon hidden) | Footer + Contact icons, JSON-LD `sameAs` |
+| Our story | `story` (paragraphs separated by an empty line) | About |
+| About photos | `site_images` (saved at once; bucket `site`, `about/shop/` and `about/team/`, full + 600 px thumb; replace/remove deletes the old files) | About shop and team cards |
+| Google reviews | `google_place_id` | "Write a review on Google" and "See all reviews" links |
+
+A new area gets a fixed code from its English name (`al-nakheel`), which gallery photos and reviews
+store; renaming an area keeps its code. Removing an area that photos or reviews use asks first and
+says how many. Tested: every field above changes the built pages (one build with test values, then
+restored). **Not editable in the panel** (fixed in code or seed): brand names, street address,
+plus code, Maps short link, the home FAQ, and texts that mention "1999", "20+ years" or "10+" in
+sentences (hero sub-line, meta descriptions, "Why us", the FAQ answers). Change those in
+`src/i18n/strings.ts` / `src/content/seed/` if the numbers change.
+
+**"Unpublished changes"** (migration `20261007050858_settings_edits_and_publish.sql`): saving any
+setting now updates `last_admin_edit` too (row triggers; the bookkeeping keys `last_admin_edit`,
+`last_publish`, `publish_lock` are excluded, and saving an unchanged value does not count).
+
+**Publish changes** (Home). The button is disabled when nothing changed, shows *Publishing…* while
+it runs, then *it will be live in about 2–3 minutes*, and stays disabled for 60 seconds (the database
+refuses a second publish within 60 s too, even from another phone). Flow:
+
+1. The panel calls the Edge Function `supabase/functions/publish-site` with the owner's login.
+2. The function checks the token (signature and expiry), `aal = aal2` and a session id, then calls
+   `publish_claim()` **with the owner's own token**, so the database applies the usual admin rule
+   (admins table + aal2 + live session). Anything else gets 401/403 with no details. Deployed with
+   `verify_jwt = false` (see `supabase/config.toml`) because the function checks the token itself.
+3. It calls the Cloudflare deploy hook stored in the secret `CF_DEPLOY_HOOK_URL` (never sent to the
+   browser, never logged). Success → `publish_finish()` saves `last_publish` = the time of the click,
+   so a change saved while the publish runs is newer and keeps "Unpublished changes" on. Failure →
+   the 60-second slot is freed so the owner can try again at once.
+4. Messages: not set up yet (no hook secret), no connection, Cloudflare refused (with its code),
+   login ended / no access, wait N seconds.
+5. **Live check:** the admin build writes `assets/build.json` (build time) inside the panel folder
+   (not on the public site). After a publish the Home screen reads it every 20 s and says *The new
+   version is live* once a build newer than the click is served (or asks to check Cloudflare after
+   15 minutes). Cloudflare's own deployment API is not used: it would need an API token.
+
+Tested live with throwaway users (all deleted): settings saved, read back and timed (17 keys); bad
+phone/URL/time/coordinates refused; password-only, non-admin and public-key sessions cannot write
+settings or claim a publish; About photos replaced and removed with no files left; the function
+refuses no token, the public key, a garbage token, a password-only token, a non-admin token and a
+logged-out token, and accepts a real admin (503 "not configured" until the hook secret exists);
+with a mock hook: success, cooldown, refused, network error, edit during publish, two clicks at the
+same moment (one publish).
+
+## Publishing setup (Cloudflare deploy hook)
+
+Do this once the Cloudflare Pages project exists. Never paste the hook URL into a chat, an email,
+the code or `.env.local`: it lets anyone start builds.
+
+1. **Cloudflare:** dashboard → **Workers & Pages** → your Pages project → **Settings** →
+   **Build** (called "Builds & deployments" on older screens) → **Deploy hooks** → **Add deploy
+   hook**. Name `admin-publish`, branch `main` → **Save**. Copy the URL it shows
+   (`https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/…`).
+2. **Supabase:** dashboard → project **riyadhhomesolution** → **Edge Functions** (left menu) →
+   **Secrets** → **Add new secret**. Name: `CF_DEPLOY_HOOK_URL`, value: paste the URL → **Save**.
+   No redeploy is needed.
+3. **Check:** in the panel change any small thing, press **Publish changes** on Home. Cloudflare →
+   your project → **Deployments** shows a new build started by the deploy hook; the panel says
+   *The new version is live* when it is done.
+4. If the URL ever leaks: delete that hook in Cloudflare, add a new one and replace the secret.
+
+## How to use the admin
+
+The panel is in English or Arabic (button at the top). On a phone, add it to the Home Screen
+(Share → Add to Home Screen) and always open it from that icon.
+
+- **Log in:** open the panel's private address (saved in your bookmarks or on the Home Screen), type
+  your email and password, then the 6-digit code from Google Authenticator.
+- **Add or edit a service:** **Services** → the category → **New service** (or tap a service).
+  Fill the Arabic and English names and short text (the rest is optional) → **Save**. Switch
+  **Shown on the website** off to hide a service without deleting it.
+- **Photos:** on a service, product or gallery item tap **Add photo** / **Replace photo**; the panel
+  makes the photo smaller before uploading. For many service photos at once: **More → Photos**,
+  pick the files (named like the service, e.g. `mixer-tap-replacement.jpg`), check the matches,
+  then **Confirm**. Work photos: **Our work → Add photos**.
+- **Approve a review:** **Reviews** (the orange number shows how many are waiting) → **Pending** →
+  read it → **Approve** (it goes on the website after the next publish) or **Reject**. You can call or
+  WhatsApp the customer from the card.
+- **Business details:** **More → Settings**: phone, WhatsApp, hours, numbers, areas, social links,
+  story, About photos, Google Place ID → **Save**.
+- **Publish:** nothing you save is on the website until you publish. **Home → Publish changes**;
+  the site updates in about 2–3 minutes. The button is grey when there is nothing new to publish
+  and for one minute after a publish.
+- **Lost or new phone:** see [If I lose my authenticator phone](#if-i-lose-my-authenticator-phone)
+  above. If the phone was stolen, also sign in on a computer and press **Security → Log out
+  everywhere**, then remove the lost phone's authenticator on the same page.
+
 ## Phase 3 (admin panel) — notes
 
 - **Reviews:** repeat numbers are allowed — never block them (done in step 3: badge only).
-- **Settings (step 4):** `shop_lat` / `shop_lng` (map pin, directions, JSON-LD); the settings
-  screen's saves should also update `last_admin_edit`.
+- **Settings:** done in step 4 (`shop_lat` / `shop_lng` editable with a "verified location" reset;
+  saves update `last_admin_edit`). Phase 5's `refresh-google-reviews` function should read
+  `settings.google_place_id` (editable in the panel) rather than only the `GOOGLE_PLACE_ID` secret.
 - **Later (public site):** phone service cards could use the 600 px `-thumb` photo instead of the
   full one. Approved review photos now have a public address in `reviews.photo_url` if the
   reviews page should show them.

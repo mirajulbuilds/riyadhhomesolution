@@ -19,7 +19,7 @@ export function Component() {
     { value: String(site.sinceYear), label: t.about.stats.since },
     { value: plus(site.yearsInBuilding, site.lang), label: t.about.stats.years },
     { value: plus(site.technicians, site.lang), label: t.about.stats.technicians },
-    { value: plus(site.areas.length, site.lang), label: t.about.stats.areas },
+    { value: plus(site.areasCount, site.lang), label: t.about.stats.areas },
   ]
 
   return (

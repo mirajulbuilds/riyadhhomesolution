@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect } from 'react'
  * segment); details go in the query string: <base>services?id=…, <base>services?new=1.
  */
 
-export const PAGES = ['dashboard', 'reviews', 'gallery', 'services', 'products', 'categories', 'photos', 'security', 'more'] as const
+export const PAGES = ['dashboard', 'reviews', 'gallery', 'services', 'products', 'categories', 'photos', 'settings', 'security', 'more'] as const
 export type Page = (typeof PAGES)[number]
 export type Params = Record<string, string>
 export interface Route {

@@ -26,6 +26,8 @@ export const seedSettings: SettingsValues = {
     { days: ['sat', 'sun', 'mon', 'tue', 'wed', 'thu'], opens: '08:00', closes: '23:30' },
     { days: ['fri'], opens: '12:30', closes: '23:30' },
   ],
+  // Optional line under the hours, e.g. for Ramadan; empty = not shown.
+  hours_note: { ar: '', en: '' },
   emergency: {
     ar: 'خدمة طوارئ على مدار الساعة',
     en: 'Emergency service 24/7',
@@ -34,6 +36,8 @@ export const seedSettings: SettingsValues = {
   since_year: 1999,
   years_in_building: 20,
   technicians: 10,
+  // 0 = count the service areas below (shown as "9+" on the About page).
+  areas_count: 0,
 
   // lat/lng: district centres from OpenStreetMap (Nominatim/Overpass, 2026-10). Ash Shuhada is
   // the official name given to the Ghirnatah area in 2005 and has no separate OSM boundary, so

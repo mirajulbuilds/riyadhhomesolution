@@ -9,12 +9,13 @@ import type { Supabase } from './supabase'
  *   products  <product id>/<stamp>.webp (+ -thumb)                        → products.image_url
  *   gallery   <gallery id>/<stamp>.webp (+ -thumb)                        → gallery.image_url / thumb_url
  *             <gallery id>/before-<stamp>.webp (+ -thumb)                 → gallery.before_image_url
+ *   site      about/shop/<stamp>.webp, about/team/<stamp>.webp (+ -thumb)     → settings.site_images
  * Every write saves the new URL first and only then deletes the folder's other files, so a
  * replaced or removed photo never leaves files behind and a failed save never loses the old one.
  * (Safari cannot encode WebP; the shared helper then produces JPEG.)
  */
 
-export type Bucket = 'services' | 'products' | 'gallery'
+export type Bucket = 'services' | 'products' | 'gallery' | 'site'
 export const BUCKET: Bucket = 'services'
 
 export interface ImageFile {

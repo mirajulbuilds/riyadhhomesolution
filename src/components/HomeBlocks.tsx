@@ -107,6 +107,7 @@ export function HoursList({ className = '' }: { className?: string }) {
             </span>
           </li>
         ))}
+        {site.hoursNote && <li className="text-sm text-muted">{site.hoursNote}</li>}
         <li className="flex items-center gap-2 font-semibold text-navy">
           <Siren aria-hidden="true" className="size-4 shrink-0 text-orange-text" />
           {site.emergency}

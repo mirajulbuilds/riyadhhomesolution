@@ -97,6 +97,7 @@ export function Footer() {
                     <span className="text-white">{row.days}:</span> {row.time}
                   </p>
                 ))}
+                {site.hoursNote && <p>{site.hoursNote}</p>}
               </div>
             </li>
             <li className="flex items-center gap-2 font-semibold text-white">
